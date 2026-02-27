@@ -1,0 +1,527 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// User Management
+model User {
+  id            String   @id @default(uuid())
+  email         String   @unique
+  phone         String?
+  password      String
+  fullName      String
+  role          UserRole @default(FARMER)
+  walletAddress String?
+  isActive      Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  // Relations
+  farms         Farm[]
+  tasks         Task[]
+  orders        Order[]
+  seedOrders    SeedOrder[]
+  
+  @@map("users")
+}
+
+enum UserRole {
+  FARMER
+  INVESTOR
+  ADMIN
+  DISTRIBUTOR
+  PROCESSOR
+}
+
+// Region Hierarchy (Province -> District -> Commune)
+model Region {
+  id        String     @id @default(uuid())
+  name      String
+  type      RegionType
+  code      String     @unique
+  parentId  String?
+  latitude  Float?
+  longitude Float?
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+
+  parent   Region?  @relation("RegionHierarchy", fields: [parentId], references: [id], onDelete: SetNull)
+  children Region[] @relation("RegionHierarchy")
+  farms    Farm[]
+
+  @@map("regions")
+  @@index([parentId])
+}
+
+enum RegionType {
+  PROVINCE
+  DISTRICT
+  COMMUNE
+}
+
+// Farm Management
+model Farm {
+  id           String      @id @default(uuid())
+  name         String
+  ownerId      String
+  regionId     String
+  address      String
+  latitude     Float
+  longitude    Float
+  totalArea    Float       @default(0) // in square meters
+  description  String?
+  certification String[]
+  status       FarmStatus  @default(PENDING)
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+
+  // Relations
+  owner        User        @relation(fields: [ownerId], references: [id])
+  region       Region      @relation(fields: [regionId], references: [id])
+  plots        Plot[]
+  inventories  Inventory[]
+
+  @@map("farms")
+  @@index([ownerId])
+  @@index([regionId])
+}
+
+enum FarmStatus {
+  PENDING
+  ACTIVE
+  SUSPENDED
+  CLOSED
+}
+
+// Plot Management with GeoJSON
+model Plot {
+  id          String     @id @default(uuid())
+  name        String
+  farmId      String
+  geometry    Json       // GeoJSON Polygon
+  area        Float      // in square meters
+  cropType    String?
+  soilType    String?
+  waterSource String?
+  status      PlotStatus @default(ACTIVE)
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  // Relations
+  farm        Farm       @relation(fields: [farmId], references: [id], onDelete: Cascade)
+  seasons     Season[]
+  tasks       Task[]
+  harvests    Harvest[]
+
+  @@map("plots")
+  @@index([farmId])
+}
+
+enum PlotStatus {
+  ACTIVE
+  FALLOW
+  HARVESTED
+  CLOSED
+}
+
+// Crop Types Catalog
+model Crop {
+  id              String   @id @default(uuid())
+  name            String
+  variety         String?
+  category        String?  // fruit, vegetable, grain, etc.
+  growthPeriod    Int?     // in days
+  temperatureMin  Float?
+  temperatureMax  Float?
+  humidityMin     Float?
+  humidityMax     Float?
+  soilType        String[]
+  waterRequirement String?  // low, medium, high
+  description     String?
+  standardProcess String?  // JSON string for cultivation process
+  images          Json?    // Array of {url, caption}
+  isActive        Boolean  @default(true)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  seedVarieties   SeedVariety[]
+  seasons         Season[]
+
+  @@map("crops")
+}
+
+// Seed Catalog
+model SeedVariety {
+  id              String   @id @default(uuid())
+  cropId          String
+  name            String   // Tên giống cụ thể
+  supplier        String?
+  price           Float
+  unit            String   @default("kg") // kg, packet, etc.
+  quantityInStock Float    @default(0)
+  description     String?
+  images          Json?
+  specifications  Json?    // JSON for additional specs
+  isActive        Boolean  @default(true)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  // Relations
+  crop            Crop     @relation(fields: [cropId], references: [id])
+  seedOrders      SeedOrderItem[]
+  seasons         Season[]
+
+  @@map("seed_varieties")
+  @@index([cropId])
+}
+
+// Seed Orders (Mua hạt giống)
+model SeedOrder {
+  id          String          @id @default(uuid())
+  farmerId    String
+  orderNumber String          @unique
+  totalAmount Float
+  status      SeedOrderStatus @default(PENDING)
+  shippingAddress String
+  notes       String?
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+
+  // Relations
+  farmer      User            @relation(fields: [farmerId], references: [id])
+  items       SeedOrderItem[]
+
+  @@map("seed_orders")
+  @@index([farmerId])
+}
+
+enum SeedOrderStatus {
+  PENDING
+  CONFIRMED
+  PROCESSING
+  SHIPPED
+  DELIVERED
+  CANCELLED
+}
+
+model SeedOrderItem {
+  id              String      @id @default(uuid())
+  seedOrderId     String
+  seedVarietyId   String
+  quantity        Float
+  unitPrice       Float
+  totalPrice      Float
+  createdAt       DateTime    @default(now())
+
+  // Relations
+  seedOrder       SeedOrder   @relation(fields: [seedOrderId], references: [id], onDelete: Cascade)
+  seedVariety     SeedVariety @relation(fields: [seedVarietyId], references: [id])
+
+  @@map("seed_order_items")
+  @@index([seedOrderId])
+  @@index([seedVarietyId])
+}
+
+// Season Management (Mùa vụ)
+model Season {
+  id                  String      @id @default(uuid())
+  plotId              String
+  cropId              String?
+  seedVarietyId       String?
+  name                String?
+  startDate           DateTime
+  expectedHarvestDate DateTime?
+  actualHarvestDate   DateTime?
+  expectedYield       Float?      // in kg
+  actualYield         Float?      // in kg
+  status              SeasonStatus @default(PLANNED)
+  standard            String?      // VietGAP, GlobalGAP, Organic, etc.
+  createdAt           DateTime     @default(now())
+  updatedAt           DateTime     @updatedAt
+
+  // Relations
+  plot                Plot        @relation(fields: [plotId], references: [id], onDelete: Cascade)
+  crop                Crop?       @relation(fields: [cropId], references: [id], onDelete: SetNull)
+  seedVariety         SeedVariety? @relation(fields: [seedVarietyId], references: [id], onDelete: SetNull)
+  tasks               Task[]
+  harvests            Harvest[]
+
+  @@map("seasons")
+  @@index([plotId])
+  @@index([cropId])
+  @@index([seedVarietyId])
+}
+
+enum SeasonStatus {
+  PLANNED
+  PLANTED
+  GROWING
+  HARVESTING
+  HARVESTED
+  COMPLETED
+}
+
+// Task Management (Chăm sóc, canh tác)
+model Task {
+  id              String     @id @default(uuid())
+  plotId          String
+  seasonId        String?
+  title           String
+  description     String?
+  type            TaskType
+  scheduledDate   DateTime
+  completedDate   DateTime?
+  status          TaskStatus @default(PENDING)
+  assignedToId    String?
+  images          Json?      // Array of {url, caption}
+  notes           String?
+  isRecurring     Boolean    @default(false)
+  recurringPattern String?   // daily, weekly, monthly
+  metadata        Json?      // Additional data (weather, conditions, etc.)
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
+
+  // Relations
+  plot            Plot       @relation(fields: [plotId], references: [id], onDelete: Cascade)
+  season          Season?    @relation(fields: [seasonId], references: [id], onDelete: SetNull)
+  assignedTo      User?      @relation(fields: [assignedToId], references: [id], onDelete: SetNull)
+
+  @@map("tasks")
+  @@index([plotId])
+  @@index([seasonId])
+  @@index([assignedToId])
+  @@index([scheduledDate])
+}
+
+enum TaskType {
+  WATERING
+  FERTILIZING
+  SPRAYING
+  PRUNING
+  HARVESTING
+  WEEDING
+  PLANTING
+  MONITORING
+  OTHER
+}
+
+enum TaskStatus {
+  PENDING
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+}
+
+// Harvest Management (Thu hoạch)
+model Harvest {
+  id              String        @id @default(uuid())
+  plotId          String
+  seasonId        String?
+  harvestDate     DateTime
+  quantity        Float         // in kg
+  qualityGrade    String?       // A, B, C, etc.
+  unit            String        @default("kg")
+  notes           String?
+  images          Json?
+  storageLocation String?
+  status          HarvestStatus @default(PENDING_PROCESSING)
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  // Relations
+  plot            Plot          @relation(fields: [plotId], references: [id], onDelete: Cascade)
+  season          Season?       @relation(fields: [seasonId], references: [id], onDelete: SetNull)
+  processingBatches ProcessingBatch[]
+
+  @@map("harvests")
+  @@index([plotId])
+  @@index([seasonId])
+  @@index([harvestDate])
+}
+
+enum HarvestStatus {
+  PENDING_PROCESSING
+  PROCESSING
+  PROCESSED
+  IN_STORAGE
+  DISTRIBUTED
+}
+
+// Processing Management (Chế biến)
+model ProcessingBatch {
+  id              String            @id @default(uuid())
+  name            String
+  processorId     String?           // User with PROCESSOR role
+  harvestId       String?
+  startDate       DateTime
+  endDate         DateTime?
+  processingType  String            // drying, milling, packaging, etc.
+  inputQuantity   Float            // kg
+  outputQuantity  Float?           // kg
+  wasteQuantity   Float?           // kg
+  qualityGrade    String?
+  certifications  String[]
+  notes           String?
+  images          Json?
+  status          ProcessingStatus @default(IN_PROGRESS)
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+
+  // Relations
+  harvest         Harvest?          @relation(fields: [harvestId], references: [id], onDelete: SetNull)
+  products        Product[]
+  inventoryItems  Inventory[]
+
+  @@map("processing_batches")
+  @@index([harvestId])
+  @@index([startDate])
+}
+
+enum ProcessingStatus {
+  PENDING
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+}
+
+// Product Catalog (Sản phẩm)
+model Product {
+  id                String        @id @default(uuid())
+  name              String
+  description       String?
+  category          String        // processed_food, fresh_produce, etc.
+  processingBatchId String?
+  sku               String        @unique
+  barcode           String?       @unique
+  unit              String        @default("kg")
+  price             Float
+  weight            Float?        // per unit
+  images            Json?
+  specifications    Json?
+  certifications    String[]
+  isActive          Boolean       @default(true)
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
+
+  // Relations
+  processingBatch   ProcessingBatch? @relation(fields: [processingBatchId], references: [id], onDelete: SetNull)
+  orderItems        OrderItem[]
+  inventoryItems    Inventory[]
+
+  @@map("products")
+  @@index([processingBatchId])
+  @@index([sku])
+}
+
+// Inventory Management (Kho)
+model Inventory {
+  id              String          @id @default(uuid())
+  farmId          String?
+  productId       String?
+  processingBatchId String?
+  quantity        Float
+  unit            String          @default("kg")
+  location        String?         // Warehouse location
+  expiryDate      DateTime?
+  batchNumber     String?
+  status          InventoryStatus @default(AVAILABLE)
+  notes           String?
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+
+  // Relations
+  farm            Farm?           @relation(fields: [farmId], references: [id], onDelete: SetNull)
+  product         Product?        @relation(fields: [productId], references: [id], onDelete: SetNull)
+  processingBatch ProcessingBatch? @relation(fields: [processingBatchId], references: [id], onDelete: SetNull)
+
+  @@map("inventory")
+  @@index([farmId])
+  @@index([productId])
+  @@index([processingBatchId])
+  @@index([status])
+}
+
+enum InventoryStatus {
+  AVAILABLE
+  RESERVED
+  SHIPPED
+  SOLD
+  EXPIRED
+  DAMAGED
+}
+
+// Order Management (Đơn hàng - Phân phối)
+model Order {
+  id                String        @id @default(uuid())
+  orderNumber       String        @unique
+  customerId        String?       // User with DISTRIBUTOR role or external customer
+  customerName      String
+  customerEmail     String?
+  customerPhone     String
+  shippingAddress   String
+  billingAddress    String?
+  totalAmount       Float
+  status            OrderStatus   @default(PENDING)
+  paymentStatus     PaymentStatus @default(PENDING)
+  paymentMethod     String?
+  shippingMethod    String?
+  trackingNumber    String?
+  notes             String?
+  shippedAt         DateTime?
+  deliveredAt       DateTime?
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
+
+  // Relations
+  customer          User?         @relation(fields: [customerId], references: [id], onDelete: SetNull)
+  items             OrderItem[]
+
+  @@map("orders")
+  @@index([customerId])
+  @@index([orderNumber])
+  @@index([status])
+  @@index([createdAt])
+}
+
+enum OrderStatus {
+  PENDING
+  CONFIRMED
+  PROCESSING
+  SHIPPED
+  DELIVERED
+  CANCELLED
+  REFUNDED
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
+  FAILED
+  REFUNDED
+}
+
+model OrderItem {
+  id              String   @id @default(uuid())
+  orderId         String
+  productId       String
+  quantity        Float
+  unitPrice       Float
+  totalPrice      Float
+  notes           String?
+  createdAt       DateTime @default(now())
+
+  // Relations
+  order           Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product         Product  @relation(fields: [productId], references: [id])
+
+  @@map("order_items")
+  @@index([orderId])
+  @@index([productId])
+}

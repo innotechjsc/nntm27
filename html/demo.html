@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Farm Plot Drawing Tool Demo</title>
+  <style>
+    html, body { height: 100%; margin: 0; font-family: Arial, Helvetica, sans-serif; }
+    :root { --panel-w: 420px; }
+    .app { display: grid; grid-template-columns: var(--panel-w) 1fr; height: 100%; }
+    .panel { border-right: 1px solid #ddd; padding: 14px; overflow: auto; background: #fff; }
+    #map { height: 100%; width: 100%; background: #f3f3f3; } /* nền xám để biết div có kích thước */
+    h2 { margin: 0 0 10px; font-size: 18px; }
+    .card { border: 1px solid #eee; border-radius: 10px; padding: 12px; margin-bottom: 12px; }
+    .row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    label { font-size: 12px; color: #444; display: block; margin-bottom: 6px; }
+    input, select, textarea {
+      width: 100%; box-sizing: border-box; padding: 10px;
+      border: 1px solid #ddd; border-radius: 10px; outline: none;
+    }
+    textarea { min-height: 120px; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; }
+    .btns { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    button {
+      padding: 10px 12px; border-radius: 12px; border: 1px solid #ddd;
+      background: #f7f7f7; cursor: pointer; font-weight: 600;
+    }
+    button.primary { background: #0b5cff; color: #fff; border-color: #0b5cff; }
+    button.danger  { background: #ffefef; border-color: #ffb3b3; color: #b00020; }
+    button:disabled { opacity: .5; cursor: not-allowed; }
+    .kv { display: grid; grid-template-columns: 140px 1fr; gap: 8px; font-size: 13px; }
+    .kv div:nth-child(odd) { color: #444; }
+    .kv div:nth-child(even) { font-weight: 700; }
+    .hint { font-size: 12px; color: #666; line-height: 1.4; }
+    .pill { display: inline-block; padding: 4px 8px; border-radius: 999px; font-size: 12px; border: 1px solid #ddd; }
+    .pill.ok { background: #eaffea; border-color: #bde7bd; color: #136f13; }
+    .pill.bad { background: #fff2f2; border-color: #ffc4c4; color: #b00020; }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <div class="panel">
+      <h2>Farm Plot Drawing Tool (Demo)</h2>
+      <div class="hint">
+        1) Nhấn <b>Bắt đầu vẽ</b> → click các điểm theo ranh giới<br/>
+        2) Click lại điểm đầu để khép vùng (hoặc nhấn <b>Hoàn tất</b>)<br/>
+        3) Xem diện tích/chu vi → xuất GeoJSON
+      </div>
+
+      <div class="card">
+        <div class="row">
+          <div>
+            <label>Tên trang trại</label>
+            <input id="farmName" value="Trang trại A" />
+          </div>
+          <div>
+            <label>Mã lô</label>
+            <input id="plotCode" value="PLOT-001" />
+          </div>
+        </div>
+        <div class="row" style="margin-top: 10px;">
+          <div>
+            <label>Cây trồng</label>
+            <select id="crop">
+              <option>Xoài</option>
+              <option>Sầu riêng</option>
+              <option>Dâu tây</option>
+              <option>Rau hữu cơ</option>
+            </select>
+          </div>
+          <div>
+            <label>Chế độ bản đồ</label>
+            <select id="mapType">
+              <option value="satellite" selected>Satellite (Vệ tinh)</option>
+              <option value="hybrid">Hybrid</option>
+              <option value="terrain">Terrain</option>
+              <option value="roadmap">Roadmap</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="btns">
+          <button id="btnStart" class="primary">Bắt đầu vẽ</button>
+          <button id="btnFinish" disabled>Hoàn tất</button>
+          <button id="btnEdit" disabled>Chỉnh sửa</button>
+          <button id="btnUndo" disabled>Undo điểm</button>
+          <button id="btnClear" class="danger" disabled>Xóa polygon</button>
+          <button id="btnTilt">3D Tilt</button>
+        </div>
+        <div style="margin-top: 10px;">
+          <span id="statusPill" class="pill bad">Chưa có polygon</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="kv">
+          <div>Diện tích</div><div id="areaText">—</div>
+          <div>Chu vi</div><div id="perimeterText">—</div>
+          <div>Số điểm</div><div id="pointsText">—</div>
+          <div>Tâm (lat,lng)</div><div id="centroidText">—</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="btns">
+          <button id="btnExport" disabled>Copy GeoJSON</button>
+          <button id="btnDownload" disabled>Tải .geojson</button>
+          <button id="btnSave" class="primary" disabled>Lưu demo</button>
+          <button id="btnZoom" disabled>Zoom tới polygon</button>
+        </div>
+        <label style="margin-top: 10px;">GeoJSON (Polygon)</label>
+        <textarea id="geojson" placeholder="GeoJSON sẽ hiện ở đây..." readonly></textarea>
+      </div>
+    </div>
+
+    <div id="map"></div>
+  </div>
+
+  <script>
+    let map, drawingManager, polygon = null, isTilted = false;
+
+    const el = (id) => document.getElementById(id);
+    const btnStart = el("btnStart");
+    const btnFinish = el("btnFinish");
+    const btnEdit = el("btnEdit");
+    const btnUndo = el("btnUndo");
+    const btnClear = el("btnClear");
+    const btnExport = el("btnExport");
+    const btnDownload = el("btnDownload");
+    const btnSave = el("btnSave");
+    const btnZoom = el("btnZoom");
+    const btnTilt = el("btnTilt");
+    const mapType = el("mapType");
+    const geojsonBox = el("geojson");
+
+    function setStatus(ok, text) {
+      const pill = el("statusPill");
+      pill.className = "pill " + (ok ? "ok" : "bad");
+      pill.textContent = text;
+    }
+
+    function formatArea(m2) {
+      if (!Number.isFinite(m2)) return "—";
+      const ha = m2 / 10000;
+      return ha >= 1 ? `${ha.toFixed(4)} ha (${m2.toFixed(0)} m²)` : `${m2.toFixed(0)} m² (${ha.toFixed(4)} ha)`;
+    }
+    function formatMeters(m) {
+      if (!Number.isFinite(m)) return "—";
+      return m >= 1000 ? `${(m/1000).toFixed(3)} km (${m.toFixed(0)} m)` : `${m.toFixed(1)} m`;
+    }
+
+    function getPolygonGeoJson(polygon) {
+      const path = polygon.getPath();
+      const coords = [];
+      for (let i=0; i<path.getLength(); i++) {
+        const p = path.getAt(i);
+        coords.push([Number(p.lng().toFixed(7)), Number(p.lat().toFixed(7))]);
+      }
+      if (coords.length) {
+        const first = coords[0], last = coords[coords.length - 1];
+        if (first[0] !== last[0] || first[1] !== last[1]) coords.push(first);
+      }
+      return { type: "Polygon", coordinates: [coords] };
+    }
+
+    function computeCentroid(path) {
+      const bounds = new google.maps.LatLngBounds();
+      for (let i=0; i<path.getLength(); i++) bounds.extend(path.getAt(i));
+      const c = bounds.getCenter();
+      return { lat: c.lat(), lng: c.lng() };
+    }
+
+    function refresh() {
+      if (!polygon) {
+        el("areaText").textContent = "—";
+        el("perimeterText").textContent = "—";
+        el("pointsText").textContent = "—";
+        el("centroidText").textContent = "—";
+        geojsonBox.value = "";
+        setStatus(false, "Chưa có polygon");
+        return;
+      }
+      const path = polygon.getPath();
+      const area = google.maps.geometry.spherical.computeArea(path);
+      const perimeter = google.maps.geometry.spherical.computeLength(path);
+      const centroid = computeCentroid(path);
+      el("areaText").textContent = formatArea(area);
+      el("perimeterText").textContent = formatMeters(perimeter);
+      el("pointsText").textContent = String(path.getLength());
+      el("centroidText").textContent = `${centroid.lat.toFixed(6)}, ${centroid.lng.toFixed(6)}`;
+      geojsonBox.value = JSON.stringify(getPolygonGeoJson(polygon), null, 2);
+
+      const ok = path.getLength() >= 3 && area > 1;
+      setStatus(ok, ok ? "Polygon hợp lệ (demo)" : "Polygon chưa hợp lệ");
+
+      btnEdit.disabled = false;
+      btnUndo.disabled = path.getLength() < 1;
+      btnClear.disabled = false;
+      btnExport.disabled = false;
+      btnDownload.disabled = false;
+      btnSave.disabled = false;
+      btnZoom.disabled = false;
+    }
+
+    function attachListeners(p) {
+      const path = p.getPath();
+      ["insert_at", "set_at", "remove_at"].forEach(evt => {
+        google.maps.event.addListener(path, evt, refresh);
+      });
+      google.maps.event.addListener(p, "dragend", refresh);
+      google.maps.event.addListener(p, "mouseup", refresh);
+    }
+
+    // IMPORTANT: callback initMap (Google API sẽ gọi)
+    window.initMap = function initMap() {
+      const center = { lat: 21.0278, lng: 105.8342 };
+
+      map = new google.maps.Map(document.getElementById("map"), {
+        center,
+        zoom: 18,
+        mapTypeId: "satellite",
+        tilt: 0
+      });
+
+      drawingManager = new google.maps.drawing.DrawingManager({
+        drawingMode: null,
+        drawingControl: false,
+        polygonOptions: {
+          fillOpacity: 0.2,
+          strokeWeight: 2,
+          editable: false,
+          draggable: false
+        }
+      });
+      drawingManager.setMap(map);
+
+      google.maps.event.addListener(drawingManager, "polygoncomplete", function(p) {
+        if (polygon) polygon.setMap(null);
+        polygon = p;
+        drawingManager.setDrawingMode(null);
+        btnStart.disabled = false;
+
+        polygon.setEditable(true);
+        polygon.setDraggable(true);
+        attachListeners(polygon);
+        refresh();
+
+        const bounds = new google.maps.LatLngBounds();
+        polygon.getPath().forEach(pt => bounds.extend(pt));
+        map.fitBounds(bounds);
+
+        btnFinish.disabled = false;
+      });
+
+      mapType.addEventListener("change", () => map.setMapTypeId(mapType.value));
+
+      btnStart.addEventListener("click", () => {
+        btnStart.disabled = true;
+        btnFinish.disabled = false;
+        setStatus(false, "Đang vẽ... click các điểm theo ranh giới");
+        drawingManager.setDrawingMode(google.maps.drawing.OverlayType.POLYGON);
+      });
+
+      btnFinish.addEventListener("click", () => {
+        drawingManager.setDrawingMode(null);
+        btnStart.disabled = false;
+        if (polygon) {
+          polygon.setEditable(false);
+          polygon.setDraggable(false);
+          btnFinish.disabled = true;
+          setStatus(true, "Đã hoàn tất (có thể Chỉnh sửa nếu cần)");
+        }
+      });
+
+      btnEdit.addEventListener("click", () => {
+        if (!polygon) return;
+        polygon.setEditable(true);
+        polygon.setDraggable(true);
+        btnFinish.disabled = false;
+        setStatus(true, "Đang chỉnh sửa polygon...");
+      });
+
+      btnUndo.addEventListener("click", () => {
+        if (!polygon) return;
+        const path = polygon.getPath();
+        if (path.getLength() > 0) path.removeAt(path.getLength() - 1);
+        refresh();
+      });
+
+      btnClear.addEventListener("click", () => {
+        if (!polygon) return;
+        if (!confirm("Bạn chắc chắn muốn xóa polygon?")) return;
+        polygon.setMap(null);
+        polygon = null;
+        btnFinish.disabled = true;
+        btnEdit.disabled = true;
+        btnUndo.disabled = true;
+        btnClear.disabled = true;
+        btnExport.disabled = true;
+        btnDownload.disabled = true;
+        btnSave.disabled = true;
+        btnZoom.disabled = true;
+        refresh();
+      });
+
+      btnExport.addEventListener("click", async () => {
+        if (!geojsonBox.value) return;
+        geojsonBox.focus();
+        geojsonBox.select();
+        try {
+          await navigator.clipboard.writeText(geojsonBox.value);
+          alert("Đã copy GeoJSON!");
+        } catch {
+          alert("Không copy được. Hãy Ctrl+C trong ô GeoJSON.");
+        }
+      });
+
+      btnDownload.addEventListener("click", () => {
+        if (!geojsonBox.value) return;
+        const filename = `${(el("farmName").value||"farm").trim()}-${(el("plotCode").value||"plot").trim()}-boundary.geojson`.replace(/\s+/g,"_");
+        const blob = new Blob([geojsonBox.value], { type: "application/geo+json" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url; a.download = filename;
+        document.body.appendChild(a); a.click(); a.remove();
+        URL.revokeObjectURL(url);
+      });
+
+      btnSave.addEventListener("click", () => {
+        if (!polygon) return;
+        const payload = {
+          farmName: el("farmName").value,
+          plotCode: el("plotCode").value,
+          crop: el("crop").value,
+          geometry: JSON.parse(geojsonBox.value)
+        };
+        console.log("SAVE DEMO payload:", payload);
+        alert("Đã tạo payload lưu demo. Xem Console (F12).");
+      });
+
+      btnZoom.addEventListener("click", () => {
+        if (!polygon) return;
+        const bounds = new google.maps.LatLngBounds();
+        polygon.getPath().forEach(pt => bounds.extend(pt));
+        map.fitBounds(bounds);
+      });
+
+      btnTilt.addEventListener("click", () => {
+        isTilted = !isTilted;
+        map.setTilt(isTilted ? 45 : 0);
+      });
+
+      refresh();
+    };
+  </script>
+
+  <!-- Async loader + callback (khuyến nghị) -->
+  <script
+    async
+    defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBOE3vO1JRSp8ONCImfa-hhpBZfM2bKhag&libraries=drawing,geometry&callback=initMap">
+  </script>
+</body>
+</html>

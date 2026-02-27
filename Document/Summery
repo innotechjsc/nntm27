@@ -1,0 +1,468 @@
+Tên gợi ý:
+AviVerse NFT – Nền tảng Nông nghiệp Thông minh & Số hoá Trang trại
+
+Ý tưởng cốt lõi:
+
+Quản lý toàn bộ vòng đời sản xuất nông nghiệp:
+Khu vực → Vườn / Trại → Lô đất → Giống → Chăm sóc → Thu hoạch → Đóng gói → Bán hàng.
+
+Tích hợp IoT & AI:
+
+Cảm biến môi trường (độ ẩm, nhiệt độ, pH, ánh sáng…)
+
+Dự báo sâu bệnh, tưới, bón phân tối ưu.
+
+Tích hợp Blockchain & NFT:
+
+Mỗi lô trang trại / lô hoa quả được số hoá thành NFT.
+
+Mua NFT = mua quyền lợi gắn với lô thật (quyền nhận sản lượng, hoặc quyền ưu tiên mua, hoặc đồng đầu tư).
+
+2. Đối tượng & vai trò người dùng
+
+Nông hộ / Trang trại
+
+Quản lý vườn, giống, lịch chăm sóc, chi phí.
+
+Nhận cảnh báo từ IoT.
+
+Bán sản phẩm & phát hành NFT tương ứng với lô sản xuất.
+
+Nhà đầu tư “nông nghiệp từ xa”
+
+Mua NFT lô trang trại, nhận suất chia sản lượng / lợi nhuận.
+
+Theo dõi tình trạng vườn: hình ảnh, camera, data cảm biến, nhật ký.
+
+Doanh nghiệp phân phối / xuất khẩu
+
+Đặt mua lô hàng, theo dõi truy xuất nguồn gốc.
+
+Ký hợp đồng mua trước trên nền tảng.
+
+Người tiêu dùng cuối
+
+Mua sản phẩm gắn QR truy xuất nguồn gốc.
+
+Có thể mua “NFT trải nghiệm” (tài trợ 1 góc vườn, nhận quà định kỳ).
+
+Quản trị hệ thống (Admin)
+
+Duyệt trang trại, duyệt NFT, cấu hình tiêu chuẩn canh tác.
+
+Quản lý tranh chấp, báo cáo, dashboard hệ thống.
+
+3. Quy trình nghiệp vụ tổng thể
+3.1 Vòng đời sản xuất (Off-chain + IoT)
+
+Thiết lập trang trại & bản đồ
+
+Tạo Khu vực (Tỉnh → Huyện → Xã / Khu nông nghiệp).
+
+Tạo Trang trại (Farm) & Lô đất / Vườn (Plot).
+
+Vẽ bản đồ lô trên nền map (Polygon, toạ độ GPS).
+
+Thiết lập mùa vụ & giống
+
+Chọn cây trồng / giống (Xoài cát, Sầu riêng, Dâu tây…).
+
+Đặt thời gian vụ mùa (gieo trồng – thu hoạch).
+
+Định nghĩa quy trình chuẩn: gieo → tưới → bón phân → phun thuốc → tỉa cành…
+
+Nhật ký và sensor
+
+Nông dân tạo nhiệm vụ (task) hàng ngày/tuần.
+
+IoT gửi dữ liệu: độ ẩm đất, nhiệt độ, mưa, ánh sáng…
+
+Hệ thống gợi ý:
+
+Tưới nếu độ ẩm dưới ngưỡng.
+
+Cảnh báo nắng nóng/ rét đậm / sương muối.
+
+Gợi ý khung dự báo năng suất (sử dụng model AI).
+
+Thu hoạch & đóng gói
+
+Đánh dấu ngày thu hoạch, sản lượng, chất lượng.
+
+Tạo Lô sản phẩm: Ví dụ: 500kg Xoài Lô A – Mùa vụ 2026.
+
+Gắn QR truy xuất cho từng thùng / pallet.
+
+3.2 Vòng đời NFT & đầu tư (On-chain + Off-chain)
+
+Tạo NFT Lô Trang trại / Lô Sản phẩm
+
+Trang trại chọn:
+
+NFT Loại 1 – Farm Plot NFT:
+Mỗi NFT = 1 lô đất / 1 hàng cây cho nhiều vụ (dạng dài hạn).
+
+NFT Loại 2 – Seasonal Harvest NFT:
+Mỗi NFT = 1 mùa vụ của lô đó (ngắn hạn 1–2 vụ).
+
+Xác định quyền lợi của người nắm NFT:
+
+Nhận X kg sản phẩm / năm.
+
+Nhận X% doanh thu bán lô đó.
+
+Quyền thăm vườn / trải nghiệm.
+
+Mint NFT
+
+Smart contract NFT (ERC-721 hoặc ERC-1155) trên Polygon (phí gas rẻ, bạn đã quen hệ Polygon).
+
+Metadata NFT:
+
+ID lô, toạ độ, loại cây trồng.
+
+Mùa vụ, dự kiến sản lượng, tiêu chuẩn (VietGAP, GlobalGAP…).
+
+Link ảnh, video, sensor dashboard (off-chain, lưu IPFS hoặc server).
+
+Bán NFT cho nhà đầu tư
+
+Niêm yết NFT trên marketplace nội bộ.
+
+Nhà đầu tư thanh toán (crypto hoặc fiat → cổng thanh toán off-chain).
+
+Theo dõi & cập nhật
+
+Trong suốt mùa vụ:
+dashboard hiển thị:
+
+Hình ảnh, camera, drone (nếu có).
+
+Dữ liệu IoT: biểu đồ nhiệt độ, độ ẩm.
+
+Nhật ký công việc (phun thuốc, bón phân…).
+
+Kết thúc mùa vụ & phân chia quyền lợi
+
+Sau thu hoạch:
+
+Ghi nhận sản lượng thực tế vào smart contract (qua oracle / admin input).
+
+Nhà đầu tư chọn:
+
+Nhận sản phẩm vật lý (ship hàng).
+
+Hoặc bán lại phần sản lượng trên marketplace → nhận tiền.
+
+4. Các phân hệ chức năng chi tiết
+4.1. Phân hệ Quản lý Khu vực / Trang trại / Vườn
+
+Cấu trúc:
+
+Khu vực → Trang trại → Lô / Vườn → Hàng cây / Ô trồng.
+
+Chức năng:
+
+CRUD Khu vực, Trang trại, Lô.
+
+Vẽ bản đồ lô (vẽ đa giác trên map).
+
+Gắn thông tin: diện tích, loại đất, nguồn nước, chủ sở hữu.
+
+4.2. Phân hệ Giống & Quy trình canh tác
+
+Danh mục cây trồng:
+
+Tên, giống, thời gian sinh trưởng, yêu cầu nhiệt độ / độ ẩm.
+
+Quy trình chuẩn:
+
+Danh sách công việc theo timeline: gieo, cấy, bón phân, tưới, phun thuốc.
+
+Cho phép clone quy trình chuẩn → tuỳ chỉnh theo từng trang trại.
+
+4.3. Phân hệ Nhiệm vụ & Nhật ký
+
+Nông dân:
+
+Xem danh sách task theo ngày / tuần.
+
+Đánh dấu hoàn thành, kèm hình ảnh.
+
+Hệ thống:
+
+Lưu nhật ký điện tử chuẩn truy xuất nguồn gốc.
+
+Tự động tạo task định kỳ (tưới, bón…).
+
+4.4. Phân hệ IoT & Cảm biến
+
+Device quản lý:
+
+Đăng ký gateway, node cảm biến.
+
+Gắn device với lô / vườn cụ thể.
+
+Data:
+
+Ingest dữ liệu theo thời gian thực.
+
+Lưu vào time-series DB (InfluxDB / TimescaleDB).
+
+Hiển thị biểu đồ, cảnh báo.
+
+4.5. Phân hệ Truy xuất nguồn gốc
+
+Mỗi thùng sản phẩm có mã QR.
+
+Quét QR → hiển thị:
+
+Trang trại, lô, nhật ký chăm sóc.
+
+Chuẩn chứng nhận.
+
+Thông tin NFT (nếu có): “Bạn đang sử dụng sản phẩm từ lô đã được đầu tư qua NFT #1234”.
+
+4.6. Phân hệ Marketplace sản phẩm
+
+Danh sách sản phẩm:
+
+Bán lẻ (cho người tiêu dùng).
+
+Bán buôn (B2B).
+
+Đặt hàng, thanh toán, quản lý đơn.
+
+Liên kết Logistics / vận chuyển.
+
+4.7. Phân hệ NFT & Blockchain
+
+Các loại NFT đề xuất:
+
+Farm Plot NFT (FP-NFT)
+
+Đại diện cho 1 lô / vườn dài hạn.
+
+Dùng cho nhà đầu tư chiến lược, thời gian 3–5 năm.
+
+Seasonal Harvest NFT (SH-NFT)
+
+Đại diện cho một mùa vụ cụ thể.
+
+Phù hợp với nhà đầu tư nhỏ lẻ, trải nghiệm.
+
+Experience NFT (EXP-NFT)
+
+Vé trải nghiệm, thăm farm, tour du lịch nông nghiệp, workshop.
+
+Chức năng hệ NFT:
+
+Trang trại:
+
+Tạo đề xuất phát hành NFT.
+
+Nhập thông tin: số lượng NFT, quyền lợi, thời gian hiệu lực.
+
+Admin:
+
+Duyệt & đảm bảo tuân thủ pháp lý.
+
+Hệ thống:
+
+Gọi Blockchain Service để:
+
+Deploy/mint NFT.
+
+Lưu nft_id, farm_plot_id, season_id trong DB.
+
+Nhà đầu tư:
+
+Mua, nắm giữ, chuyển nhượng NFT.
+
+Xem dashboard lô đã đầu tư.
+
+5. Kiến trúc kỹ thuật (gợi ý microservices)
+5.1. Các service chính
+
+API Gateway
+
+Nginx/Kong/Traefik.
+
+Route request tới các microservice.
+
+Auth Service
+
+Đăng ký, đăng nhập (email/số điện thoại).
+
+Multi-role (Farmer, Investor, Admin).
+
+JWT, OAuth2.
+
+Farm Management Service
+
+Khu vực, Trang trại, Lô, Mùa vụ, Giống, Quy trình canh tác.
+
+Task & Log Service
+
+Nhiệm vụ, nhật ký, hình ảnh kèm theo.
+
+IoT Ingestion Service
+
+Nhận dữ liệu từ MQTT/HTTP.
+
+Ghi vào time-series DB.
+
+Marketplace Service
+
+Sản phẩm, đơn hàng, thanh toán (liên kết cổng thanh toán VNPay, Momo…).
+
+NFT & Blockchain Service
+
+Kết nối node blockchain (Polygon).
+
+Thực hiện:
+
+Mint NFT.
+
+Ghi nhận ownership.
+
+Trigger chia sẻ quyền lợi (nếu có dùng token).
+
+Notification Service
+
+Gửi SMS/Email/Push.
+
+Cảnh báo IoT, nhắc việc.
+
+Analytics & AI Service
+
+Dự báo năng suất, cảnh báo sâu bệnh.
+
+Dashboard KPI.
+
+5.2. Cơ sở dữ liệu
+
+PostgreSQL / MySQL: dữ liệu nghiệp vụ (người dùng, farm, sản phẩm, NFT mapping).
+
+Time-series DB (InfluxDB / Timescale): dữ liệu cảm biến.
+
+Redis: cache, queue nhẹ.
+
+Object Storage: ảnh, video (S3/R2/MinIO).
+
+6. Thiết kế NFT & mapping với thế giới thực
+6.1. Cấu trúc metadata NFT (ERC-721/1155)
+
+Ví dụ JSON metadata:
+
+{
+  "name": "Seasonal Harvest NFT #1234 - Mango Farm A",
+  "description": "Lô xoài cát Hòa Lộc – Mùa vụ 2026 tại Trang trại A",
+  "image": "ipfs://.../mango-farm-a-2026.png",
+  "attributes": [
+    {"trait_type": "Farm", "value": "Trang trại A"},
+    {"trait_type": "Location", "value": "Tiền Giang"},
+    {"trait_type": "Crop", "value": "Xoài cát Hòa Lộc"},
+    {"trait_type": "Season", "value": "2026-01 to 2026-07"},
+    {"trait_type": "Expected Yield (kg)", "value": 5000},
+    {"trait_type": "Standard", "value": "VietGAP"},
+    {"trait_type": "Plot ID", "value": "PLOT-001"},
+    {"trait_type": "Off-chain ID", "value": "SHNFT-2026-001"}
+  ]
+}
+
+6.2. Mapping on-chain ↔ off-chain
+
+Bảng nft_assets trong DB:
+
+id
+
+onchain_contract_address
+
+onchain_token_id
+
+type (FP-NFT, SH-NFT, EXP-NFT)
+
+farm_id, plot_id, season_id
+
+current_owner_wallet
+
+status (active, redeemed, closed)
+
+Khi có sự kiện on-chain (Transfer, Mint):
+
+Blockchain service lắng nghe event → cập nhật DB.
+
+7. Mô hình kinh doanh & doanh thu
+
+Phí nền tảng (Platform fee)
+
+Thu % trên mỗi giao dịch NFT.
+
+Thu % trên mỗi đơn hàng nông sản.
+
+Gói dịch vụ cho Trang trại
+
+Gói Basic: dùng app quản lý farm, nhật ký, QR.
+
+Gói Pro: thêm IoT, cảnh báo, AI analytics.
+
+Gói NFT: hỗ trợ phát hành & marketing NFT farm.
+
+Dịch vụ B2B
+
+Tuỳ chỉnh hệ thống cho tập đoàn, vùng nông nghiệp lớn.
+
+Dịch vụ data (thống kê, dự báo cho doanh nghiệp).
+
+8. Lộ trình triển khai (3 giai đoạn)
+Giai đoạn 1 – MVP (6–9 tháng)
+
+Mục tiêu:
+Hoạt động tốt ở 1–2 vùng thí điểm, chưa cần NFT phức tạp.
+
+Module:
+
+Auth, Farm Management, Task & Log, Truy xuất QR.
+
+Marketplace đơn giản (đặt hàng, thanh toán COD/online).
+
+Dashboard cơ bản cho farmer & admin.
+
+Giai đoạn 2 – NFT & IoT (9–18 tháng)
+
+Thêm:
+
+IoT Ingestion + Dashboard sensor.
+
+NFT & Blockchain Service:
+
+Seasonal Harvest NFT.
+
+Investor Portal:
+
+Mua NFT, xem farm dashboard, nhận thông báo.
+
+Giai đoạn 3 – Mở rộng & AI (18–36 tháng)
+
+Hoàn thiện:
+
+Farm Plot NFT dài hạn.
+
+Mô hình AI dự báo năng suất, cảnh báo sâu bệnh chi tiết.
+
+API mở cho bên thứ 3 (logistics, fintech, bảo hiểm mùa vụ).
+
+9. Rủi ro & pháp lý (cần lưu ý riêng)
+
+Pháp lý đất đai & quyền sở hữu:
+
+NFT không nhất thiết = sổ đỏ. Có thể định nghĩa NFT là hợp đồng dịch vụ / quyền nhận sản lượng, chứ không phải quyền sở hữu đất.
+
+Chứng khoán hoá / gọi vốn:
+
+Nếu NFT mang tính đầu tư lợi nhuận, có thể bị xem là chứng khoán → cần tư vấn pháp lý.
+
+An toàn thực phẩm & tiêu chuẩn:
+
+Gắn chặt với quy trình, kiểm tra dữ liệu thật (tránh “NFT rỗng”).

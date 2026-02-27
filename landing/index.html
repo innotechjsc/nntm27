@@ -1,0 +1,3906 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AVIVerse NFT - Nền tảng Nông nghiệp Thông minh & Số hoá Trang trại</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-green: #10b981;
+            --dark-green: #059669;
+            --light-green: #34d399;
+            --lighter-green: #d1fae5;
+            --text-dark: #1f2937;
+            --text-gray: #6b7280;
+            --white: #ffffff;
+            --shadow: rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+            line-height: 1.6;
+            color: var(--text-dark);
+            overflow-x: hidden;
+        }
+
+        /* Animated Background Elements */
+        .floating-icons {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .floating-icon {
+            position: absolute;
+            font-size: 2rem;
+            opacity: 0.1;
+            animation: floatAround 20s infinite linear;
+        }
+
+        @keyframes floatAround {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+            }
+            100% {
+                transform: translateY(-100px) rotate(360deg);
+            }
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 10px var(--shadow);
+            z-index: 1000;
+            padding: 1rem 0;
+            transition: all 0.3s ease;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary-green);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo-icon {
+            font-size: 2rem;
+            animation: rotate 3s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-dark);
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary-green);
+        }
+
+        .cta-button {
+            background: var(--primary-green);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(16, 185, 129, 0.3);
+        }
+
+        .cta-button:hover {
+            background: var(--dark-green);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(16, 185, 129, 0.4);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            background: 
+                linear-gradient(135deg, #d1fae5 0%, #a7f3d0 50%, #6ee7b7 100%),
+                radial-gradient(circle at 20% 30%, rgba(16, 185, 129, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(52, 211, 153, 0.15) 0%, transparent 50%);
+            background-size: 100% 100%, 200% 200%, 200% 200%;
+            background-position: center, 0% 0%, 100% 100%;
+            animation: backgroundMove 20s ease-in-out infinite;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 120px 2rem 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        @keyframes backgroundMove {
+            0%, 100% { background-position: center, 0% 0%, 100% 100%; }
+            50% { background-position: center, 100% 100%, 0% 0%; }
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(16, 185, 129, 0.1) 0%, transparent 70%);
+            animation: pulse 20s infinite;
+            top: 50%;
+            left: 50%;
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                repeating-linear-gradient(45deg, transparent, transparent 35px, rgba(16, 185, 129, 0.03) 35px, rgba(16, 185, 129, 0.03) 70px);
+            pointer-events: none;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); }
+            50% { transform: translate(-50%, -50%) scale(1.1); }
+        }
+
+        /* Animated Icons Container */
+        .hero-icons {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .hero-icon {
+            position: absolute;
+            font-size: 2.5rem;
+            opacity: 0.4;
+            animation: iconFloat 8s ease-in-out infinite;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+        }
+
+        .hero-icon:nth-child(1) {
+            top: 10%;
+            left: 5%;
+            animation-delay: 0s;
+            animation-duration: 10s;
+        }
+
+        .hero-icon:nth-child(2) {
+            top: 20%;
+            right: 8%;
+            animation-delay: 1s;
+            animation-duration: 12s;
+        }
+
+        .hero-icon:nth-child(3) {
+            top: 35%;
+            left: 3%;
+            animation-delay: 2s;
+            animation-duration: 9s;
+        }
+
+        .hero-icon:nth-child(4) {
+            top: 50%;
+            right: 5%;
+            animation-delay: 3s;
+            animation-duration: 11s;
+        }
+
+        .hero-icon:nth-child(5) {
+            bottom: 30%;
+            left: 8%;
+            animation-delay: 4s;
+            animation-duration: 13s;
+        }
+
+        .hero-icon:nth-child(6) {
+            bottom: 20%;
+            right: 10%;
+            animation-delay: 5s;
+            animation-duration: 10s;
+        }
+
+        .hero-icon:nth-child(7) {
+            top: 15%;
+            left: 50%;
+            animation-delay: 6s;
+            animation-duration: 14s;
+        }
+
+        .hero-icon:nth-child(8) {
+            bottom: 15%;
+            left: 50%;
+            animation-delay: 7s;
+            animation-duration: 11s;
+        }
+
+        .hero-icon:nth-child(9) {
+            top: 40%;
+            right: 15%;
+            animation-delay: 8s;
+            animation-duration: 12s;
+        }
+
+        .hero-icon:nth-child(10) {
+            bottom: 40%;
+            left: 12%;
+            animation-delay: 9s;
+            animation-duration: 9s;
+        }
+
+        .hero-icon:nth-child(11) {
+            top: 60%;
+            left: 20%;
+            animation-delay: 10s;
+            animation-duration: 13s;
+        }
+
+        .hero-icon:nth-child(12) {
+            top: 70%;
+            right: 20%;
+            animation-delay: 11s;
+            animation-duration: 10s;
+        }
+
+        .hero-icon:nth-child(13) {
+            top: 25%;
+            left: 25%;
+            animation-delay: 12s;
+            animation-duration: 11s;
+        }
+
+        .hero-icon:nth-child(14) {
+            bottom: 25%;
+            right: 25%;
+            animation-delay: 13s;
+            animation-duration: 12s;
+        }
+
+        .hero-icon:nth-child(15) {
+            top: 45%;
+            left: 15%;
+            animation-delay: 14s;
+            animation-duration: 9s;
+        }
+
+        .hero-icon:nth-child(16) {
+            bottom: 45%;
+            right: 15%;
+            animation-delay: 15s;
+            animation-duration: 14s;
+        }
+
+        @keyframes iconFloat {
+            0%, 100% {
+                transform: translate(0, 0) rotate(0deg) scale(1);
+                opacity: 0.4;
+            }
+            25% {
+                transform: translate(20px, -30px) rotate(5deg) scale(1.1);
+                opacity: 0.5;
+            }
+            50% {
+                transform: translate(-15px, -50px) rotate(-5deg) scale(0.9);
+                opacity: 0.6;
+            }
+            75% {
+                transform: translate(25px, -20px) rotate(3deg) scale(1.05);
+                opacity: 0.5;
+            }
+        }
+
+        /* Additional floating particles */
+        .hero-particle {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: var(--primary-green);
+            border-radius: 50%;
+            opacity: 0.3;
+            animation: particleFloat 15s linear infinite;
+        }
+
+        .hero-particle:nth-child(odd) {
+            background: var(--light-green);
+            animation-duration: 20s;
+        }
+
+        @keyframes particleFloat {
+            0% {
+                transform: translateY(100vh) translateX(0) scale(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.3;
+            }
+            90% {
+                opacity: 0.3;
+            }
+            100% {
+                transform: translateY(-100px) translateX(100px) scale(1);
+                opacity: 0;
+            }
+        }
+
+        .hero-content {
+            max-width: 1200px;
+            text-align: center;
+            z-index: 1;
+            animation: fadeInUp 1s ease;
+            position: relative;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            color: var(--text-dark);
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+        }
+
+        .hero .highlight {
+            color: var(--primary-green);
+            position: relative;
+        }
+
+        .hero .highlight::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 10px;
+            background: rgba(16, 185, 129, 0.3);
+            z-index: -1;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            color: var(--text-gray);
+            margin-bottom: 2rem;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            background: var(--primary-green);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
+            display: inline-block;
+        }
+
+        .btn-primary:hover {
+            background: var(--dark-green);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.5);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: var(--primary-green);
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            border: 2px solid var(--primary-green);
+            display: inline-block;
+        }
+
+        .btn-secondary:hover {
+            background: var(--primary-green);
+            color: white;
+            transform: translateY(-3px);
+        }
+
+        /* About Section */
+        .about {
+            padding: 100px 2rem;
+            background: linear-gradient(180deg, #ffffff 0%, #f9fafb 100%);
+            position: relative;
+        }
+
+        .about-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 3rem;
+            flex-wrap: wrap;
+            border-bottom: 2px solid #e5e7eb;
+            padding-bottom: 1rem;
+        }
+
+        .about-tab {
+            padding: 1rem 2rem;
+            background: white;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px 12px 0 0;
+            cursor: pointer;
+            font-weight: 600;
+            color: var(--text-gray);
+            transition: all 0.3s ease;
+            position: relative;
+            bottom: -1px;
+        }
+
+        .about-tab:hover {
+            border-color: var(--primary-green);
+            color: var(--primary-green);
+        }
+
+        .about-tab.active {
+            background: var(--primary-green);
+            color: white;
+            border-color: var(--primary-green);
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+        }
+
+        .about-content {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .about-content.active {
+            display: block;
+        }
+
+        .about-content-card {
+            background: white;
+            border-radius: 20px;
+            padding: 3rem;
+            box-shadow: 0 8px 30px rgba(16, 185, 129, 0.1);
+            border: 2px solid rgba(16, 185, 129, 0.1);
+        }
+
+        .about-content-card h3 {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--text-dark);
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .about-content-card h3::before {
+            content: '';
+            width: 6px;
+            height: 40px;
+            background: linear-gradient(180deg, var(--primary-green), var(--light-green));
+            border-radius: 3px;
+        }
+
+        .core-idea-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .core-idea-item {
+            background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+            padding: 2rem;
+            border-radius: 16px;
+            border-left: 4px solid var(--primary-green);
+            transition: all 0.3s ease;
+        }
+
+        .core-idea-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(16, 185, 129, 0.2);
+        }
+
+        .core-idea-item h4 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .core-idea-item ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .core-idea-item li {
+            padding: 0.5rem 0;
+            color: var(--text-gray);
+            display: flex;
+            align-items: start;
+            gap: 0.75rem;
+        }
+
+        .core-idea-item li::before {
+            content: '✓';
+            color: var(--primary-green);
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .user-roles-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .user-role-card {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 4px 20px rgba(16, 185, 129, 0.1);
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .user-role-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-green), var(--light-green));
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .user-role-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 35px rgba(16, 185, 129, 0.2);
+            border-color: var(--primary-green);
+        }
+
+        .user-role-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .user-role-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .user-role-card h4 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 1rem;
+        }
+
+        .user-role-card ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .user-role-card li {
+            padding: 0.5rem 0;
+            color: var(--text-gray);
+            display: flex;
+            align-items: start;
+            gap: 0.75rem;
+        }
+
+        .user-role-card li::before {
+            content: '→';
+            color: var(--primary-green);
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .value-proposition-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .value-item {
+            background: linear-gradient(135deg, #ffffff 0%, #f0fdf4 100%);
+            padding: 2rem;
+            border-radius: 16px;
+            border: 2px solid rgba(16, 185, 129, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .value-item:hover {
+            border-color: var(--primary-green);
+            box-shadow: 0 8px 25px rgba(16, 185, 129, 0.15);
+        }
+
+        .value-item h4 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--primary-green);
+            margin-bottom: 1rem;
+        }
+
+        .value-item p {
+            color: var(--text-gray);
+            line-height: 1.8;
+        }
+
+        .workflow-steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .workflow-section {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 4px 20px rgba(16, 185, 129, 0.1);
+            border-left: 5px solid var(--primary-green);
+        }
+
+        .workflow-section h4 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .workflow-section .workflow-step {
+            margin-bottom: 1.5rem;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        .workflow-section .workflow-step::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0.5rem;
+            width: 8px;
+            height: 8px;
+            background: var(--primary-green);
+            border-radius: 50%;
+        }
+
+        .workflow-section .workflow-step h5 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .workflow-section .workflow-step p {
+            color: var(--text-gray);
+            line-height: 1.7;
+            margin: 0;
+        }
+
+        /* Features Section */
+        .features {
+            padding: 100px 2rem;
+            background: white;
+            position: relative;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-header h2 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--text-dark);
+            margin-bottom: 1rem;
+        }
+
+        .section-header p {
+            font-size: 1.2rem;
+            color: var(--text-gray);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px var(--shadow);
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-green), var(--light-green));
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 8px 30px rgba(16, 185, 129, 0.2);
+            border-color: var(--primary-green);
+        }
+
+        .feature-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .feature-icon {
+            width: 64px;
+            height: 64px;
+            background: linear-gradient(135deg, var(--primary-green), var(--light-green));
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            font-size: 2rem;
+            color: white;
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+            animation: iconBounce 2s ease-in-out infinite;
+        }
+
+        @keyframes iconBounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        .feature-card h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 1rem;
+        }
+
+        .feature-card p {
+            color: var(--text-gray);
+            line-height: 1.8;
+        }
+
+        /* Benefits Section */
+        .benefits {
+            padding: 100px 2rem;
+            background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .benefits::before {
+            content: '💰🌾📊🏪';
+            position: absolute;
+            font-size: 8rem;
+            opacity: 0.03;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: rotate 30s linear infinite;
+        }
+
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .benefit-item {
+            text-align: center;
+            padding: 2rem;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .benefit-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(16, 185, 129, 0.15);
+        }
+
+        .benefit-number {
+            font-size: 3rem;
+            font-weight: 800;
+            color: var(--primary-green);
+            margin-bottom: 0.5rem;
+            animation: scaleIn 2s ease-in-out infinite;
+        }
+
+        @keyframes scaleIn {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .benefit-item h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .benefit-item p {
+            color: var(--text-gray);
+        }
+
+        /* Active Plots Section */
+        .active-plots {
+            padding: 100px 2rem;
+            background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+            position: relative;
+        }
+
+        .plots-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .plot-card {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 8px 25px rgba(16, 185, 129, 0.15);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            border: 3px solid transparent;
+        }
+
+        .plot-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: var(--primary-green);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .plot-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 12px 35px rgba(16, 185, 129, 0.25);
+            border-color: var(--primary-green);
+        }
+
+        .plot-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .plot-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 1.5rem;
+        }
+
+        .plot-name {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .plot-status {
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .plot-status.active {
+            background: #d1fae5;
+            color: var(--dark-green);
+        }
+
+        .plot-status.monitoring {
+            background: #fef3c7;
+            color: #d97706;
+        }
+
+        .live-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.25rem 0.75rem;
+            background: #fee2e2;
+            color: #dc2626;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            margin-left: 0.5rem;
+            animation: pulseLive 2s ease-in-out infinite;
+        }
+
+        .live-indicator::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: #dc2626;
+            border-radius: 50%;
+            animation: blinkLive 1s ease-in-out infinite;
+        }
+
+        @keyframes pulseLive {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        @keyframes blinkLive {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        .plot-actions {
+            margin-top: 1.5rem;
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn-view-map {
+            flex: 1;
+            padding: 0.75rem 1.5rem;
+            background: linear-gradient(135deg, var(--primary-green), var(--light-green));
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+        }
+
+        .btn-view-map:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+        }
+
+        .btn-view-map:active {
+            transform: translateY(0);
+        }
+
+        .metric-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-green);
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .metric-value.updating {
+            animation: valueUpdate 0.5s ease;
+        }
+
+        @keyframes valueUpdate {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); color: var(--light-green); }
+        }
+
+        .metric-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-green), var(--light-green));
+            border-radius: 3px;
+            transition: width 1s ease;
+            animation: progressGlow 2s ease-in-out infinite;
+            position: relative;
+        }
+
+        .metric-progress-bar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            animation: progressShimmer 2s infinite;
+        }
+
+        @keyframes progressShimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .last-updated {
+            font-size: 0.75rem;
+            color: var(--text-gray);
+            text-align: center;
+            margin-top: 0.5rem;
+            font-style: italic;
+        }
+
+        .plot-description {
+            color: var(--text-gray);
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        .plot-boundary {
+            background: #f3f4f6;
+            border-radius: 12px;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+
+        .boundary-label {
+            font-size: 0.85rem;
+            color: var(--text-gray);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .boundary-visual {
+            height: 120px;
+            border-radius: 8px;
+            position: relative;
+            overflow: hidden;
+            border: 2px dashed var(--primary-green);
+        }
+
+        .boundary-polygon {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80%;
+            height: 80%;
+            border: 3px solid;
+            border-radius: 15px;
+            animation: boundaryPulse 3s ease-in-out infinite;
+        }
+
+        @keyframes boundaryPulse {
+            0%, 100% { opacity: 0.7; transform: translate(-50%, -50%) scale(1); }
+            50% { opacity: 1; transform: translate(-50%, -50%) scale(1.05); }
+        }
+
+        .plot-metrics {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+
+        .metric-item {
+            background: #f9fafb;
+            padding: 1rem;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .metric-label {
+            font-size: 0.85rem;
+            color: var(--text-gray);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .metric-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-green);
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .metric-progress {
+            margin-top: 0.5rem;
+            height: 6px;
+            background: #e5e7eb;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .metric-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-green), var(--light-green));
+            border-radius: 3px;
+            transition: width 1s ease;
+            animation: progressGlow 2s ease-in-out infinite;
+        }
+
+        @keyframes progressGlow {
+            0%, 100% { box-shadow: 0 0 5px rgba(16, 185, 129, 0.5); }
+            50% { box-shadow: 0 0 15px rgba(16, 185, 129, 0.8); }
+        }
+
+        /* Statistics Section */
+        .statistics {
+            padding: 100px 2rem;
+            background: white;
+            position: relative;
+        }
+
+        .stats-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 3rem;
+            flex-wrap: wrap;
+        }
+
+        .stat-tab {
+            padding: 1rem 2rem;
+            background: white;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            color: var(--text-gray);
+            transition: all 0.3s ease;
+        }
+
+        .stat-tab:hover {
+            border-color: var(--primary-green);
+            color: var(--primary-green);
+        }
+
+        .stat-tab.active {
+            background: var(--primary-green);
+            color: white;
+            border-color: var(--primary-green);
+        }
+
+        .stats-content {
+            display: none;
+        }
+
+        .stats-content.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+            padding: 2rem;
+            border-radius: 16px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.1);
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(16, 185, 129, 0.2);
+            border-color: var(--primary-green);
+        }
+
+        .stat-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--primary-green);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 1.1rem;
+            color: var(--text-gray);
+            font-weight: 600;
+        }
+
+        .history-timeline {
+            max-width: 800px;
+            margin: 3rem auto;
+            position: relative;
+            padding-left: 2rem;
+        }
+
+        .history-timeline::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: linear-gradient(180deg, var(--primary-green), var(--light-green));
+        }
+
+        .timeline-item {
+            position: relative;
+            padding-left: 3rem;
+            margin-bottom: 2rem;
+            padding-bottom: 2rem;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -2.5rem;
+            top: 0.5rem;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: var(--primary-green);
+            border: 3px solid white;
+            box-shadow: 0 0 0 3px var(--primary-green);
+        }
+
+        .timeline-date {
+            font-size: 0.9rem;
+            color: var(--text-gray);
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-details {
+            color: var(--text-gray);
+            line-height: 1.6;
+        }
+
+        .revenue-chart {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            margin-top: 2rem;
+        }
+
+        .chart-bars {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-around;
+            height: 200px;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .chart-bar {
+            flex: 1;
+            background: linear-gradient(180deg, var(--primary-green), var(--light-green));
+            border-radius: 8px 8px 0 0;
+            min-height: 20px;
+            position: relative;
+            transition: all 0.3s ease;
+            animation: barGrow 1s ease;
+        }
+
+        .chart-bar:hover {
+            opacity: 0.8;
+            transform: scaleY(1.05);
+        }
+
+        @keyframes barGrow {
+            from { height: 0; }
+        }
+
+        .chart-label {
+            margin-top: 0.5rem;
+            text-align: center;
+            font-size: 0.85rem;
+            color: var(--text-gray);
+        }
+
+        /* Process Section - New Creative Design */
+        .process {
+            padding: 100px 2rem;
+            background: linear-gradient(180deg, #ffffff 0%, #f0fdf4 50%, #ffffff 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .process::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(16, 185, 129, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(52, 211, 153, 0.05) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .process-journey {
+            max-width: 1400px;
+            margin: 4rem auto;
+            position: relative;
+        }
+
+        /* Horizontal Flow with Cards */
+        .process-flow-horizontal {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            padding: 3rem 0;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+
+        .process-step-card {
+            flex: 1;
+            min-width: 200px;
+            max-width: 280px;
+            background: white;
+            border-radius: 24px;
+            padding: 2.5rem 2rem;
+            box-shadow: 0 10px 40px rgba(16, 185, 129, 0.1);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            border: 3px solid transparent;
+            overflow: hidden;
+        }
+
+        .process-step-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, var(--primary-green), var(--light-green));
+            transform: scaleX(0);
+            transition: transform 0.4s ease;
+        }
+
+        .process-step-card:hover {
+            transform: translateY(-15px) scale(1.03);
+            box-shadow: 0 20px 60px rgba(16, 185, 129, 0.25);
+            border-color: var(--primary-green);
+        }
+
+        .process-step-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .step-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .step-number-badge {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--primary-green), var(--light-green));
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: white;
+            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.3);
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .step-number-badge::after {
+            content: '';
+            position: absolute;
+            inset: -4px;
+            border-radius: 20px;
+            padding: 4px;
+            background: linear-gradient(135deg, var(--primary-green), var(--light-green));
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            opacity: 0;
+            animation: badgeGlow 2s ease-in-out infinite;
+        }
+
+        @keyframes badgeGlow {
+            0%, 100% { opacity: 0; transform: scale(1); }
+            50% { opacity: 0.6; transform: scale(1.1); }
+        }
+
+        .step-icon-large {
+            font-size: 3.5rem;
+            line-height: 1;
+            animation: iconFloat 3s ease-in-out infinite;
+        }
+
+        @keyframes iconFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .step-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 0.75rem;
+            line-height: 1.3;
+        }
+
+        .step-description {
+            color: var(--text-gray);
+            font-size: 0.95rem;
+            line-height: 1.7;
+            margin-bottom: 1.5rem;
+        }
+
+        .step-features {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .step-feature {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.5rem 0;
+            color: var(--text-gray);
+            font-size: 0.9rem;
+        }
+
+        .step-feature::before {
+            content: '✓';
+            width: 20px;
+            height: 20px;
+            background: var(--lighter-green);
+            color: var(--primary-green);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.75rem;
+            flex-shrink: 0;
+        }
+
+        /* Connecting Arrows */
+        .process-arrow {
+            flex-shrink: 0;
+            width: 60px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-green), var(--light-green));
+            position: relative;
+            margin: 0 1rem;
+        }
+
+        .process-arrow::after {
+            content: '';
+            position: absolute;
+            right: -8px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 0;
+            height: 0;
+            border-left: 12px solid var(--primary-green);
+            border-top: 8px solid transparent;
+            border-bottom: 8px solid transparent;
+        }
+
+        .process-arrow::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-green), var(--light-green));
+            animation: arrowFlow 2s ease-in-out infinite;
+        }
+
+        @keyframes arrowFlow {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        /* Progress Indicator */
+        .process-progress {
+            max-width: 1200px;
+            margin: 3rem auto;
+            padding: 3rem;
+            background: linear-gradient(135deg, #ffffff 0%, #f0fdf4 100%);
+            border-radius: 24px;
+            box-shadow: 0 12px 40px rgba(16, 185, 129, 0.15);
+            border: 2px solid rgba(16, 185, 129, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .process-progress::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(16, 185, 129, 0.05) 0%, transparent 70%);
+            animation: rotateBg 20s linear infinite;
+        }
+
+        @keyframes rotateBg {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .progress-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .progress-title {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, var(--primary-green), var(--dark-green));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .progress-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0 3rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .progress-stat {
+            text-align: center;
+            padding: 1.5rem;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .progress-stat:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(16, 185, 129, 0.2);
+        }
+
+        .stat-icon {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            display: block;
+            animation: iconBounce 2s ease-in-out infinite;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--primary-green);
+            margin-bottom: 0.25rem;
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--text-gray);
+            font-weight: 600;
+        }
+
+        .progress-bar-container {
+            height: 20px;
+            background: #e5e7eb;
+            border-radius: 15px;
+            overflow: hidden;
+            position: relative;
+            margin: 2rem 0;
+            box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-green), var(--light-green), var(--primary-green));
+            background-size: 200% 100%;
+            border-radius: 15px;
+            width: 0%;
+            transition: width 2s ease;
+            position: relative;
+            overflow: visible;
+            animation: gradientMove 3s linear infinite;
+        }
+
+        @keyframes gradientMove {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 200% 50%; }
+        }
+
+        .progress-bar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            animation: progressShine 2s infinite;
+        }
+
+        .progress-bar::before {
+            content: '🎯';
+            position: absolute;
+            right: -20px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.5rem;
+            animation: targetFloat 2s ease-in-out infinite;
+        }
+
+        @keyframes targetFloat {
+            0%, 100% { transform: translateY(-50%) translateX(0); }
+            50% { transform: translateY(-50%) translateX(-5px); }
+        }
+
+        @keyframes progressShine {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .progress-percentage {
+            text-align: center;
+            font-size: 3rem;
+            font-weight: 800;
+            color: var(--primary-green);
+            margin: 1.5rem 0;
+            position: relative;
+            z-index: 1;
+            text-shadow: 0 2px 10px rgba(16, 185, 129, 0.2);
+        }
+
+        .progress-steps {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .progress-step {
+            flex: 1;
+            text-align: center;
+            position: relative;
+            padding-top: 3rem;
+            transition: all 0.3s ease;
+        }
+
+        .progress-step:hover {
+            transform: translateY(-5px);
+        }
+
+        .progress-step::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 40px;
+            height: 40px;
+            background: #e5e7eb;
+            border-radius: 50%;
+            border: 5px solid white;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            transition: all 0.5s ease;
+            z-index: 2;
+        }
+
+        .progress-step::after {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: rgba(16, 185, 129, 0.1);
+            opacity: 0;
+            transition: all 0.5s ease;
+            z-index: 1;
+        }
+
+        .progress-step.active::before {
+            background: var(--primary-green);
+            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.5);
+            animation: stepPulse 2s ease-in-out infinite;
+            width: 50px;
+            height: 50px;
+        }
+
+        .progress-step.active::after {
+            opacity: 1;
+            animation: stepRipple 2s ease-in-out infinite;
+        }
+
+        .progress-step.completed::before {
+            background: var(--dark-green);
+            content: '✓';
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            font-weight: 800;
+        }
+
+        @keyframes stepPulse {
+            0%, 100% { transform: translateX(-50%) scale(1); }
+            50% { transform: translateX(-50%) scale(1.15); }
+        }
+
+        @keyframes stepRipple {
+            0% {
+                transform: translateX(-50%) scale(0.8);
+                opacity: 0.8;
+            }
+            100% {
+                transform: translateX(-50%) scale(1.5);
+                opacity: 0;
+            }
+        }
+
+        .progress-step-icon {
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 1.5rem;
+            opacity: 0;
+            transition: all 0.5s ease;
+            z-index: 3;
+        }
+
+        .progress-step.active .progress-step-icon {
+            opacity: 1;
+            animation: iconSpin 1s ease-in-out;
+        }
+
+        @keyframes iconSpin {
+            0% { transform: translateX(-50%) rotate(0deg) scale(0); }
+            50% { transform: translateX(-50%) rotate(180deg) scale(1.2); }
+            100% { transform: translateX(-50%) rotate(360deg) scale(1); }
+        }
+
+        .progress-step-label {
+            font-size: 0.9rem;
+            color: var(--text-gray);
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin-top: 0.5rem;
+        }
+
+        .progress-step.active .progress-step-label {
+            color: var(--primary-green);
+            font-weight: 700;
+            font-size: 1rem;
+        }
+
+        .progress-step.completed .progress-step-label {
+            color: var(--dark-green);
+        }
+
+        .progress-details {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background: white;
+            border-radius: 16px;
+            border-left: 4px solid var(--primary-green);
+            position: relative;
+            z-index: 1;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.5s ease;
+        }
+
+        .progress-details.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .progress-details-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .progress-details-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .progress-details-item {
+            padding: 0.5rem 0;
+            color: var(--text-gray);
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .progress-details-item::before {
+            content: '→';
+            color: var(--primary-green);
+            font-weight: 700;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            padding: 100px 2rem;
+            background: linear-gradient(135deg, var(--primary-green) 0%, var(--dark-green) 100%);
+            color: white;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-section::before {
+            content: '🌱🌾🌿🌳🌲';
+            position: absolute;
+            font-size: 10rem;
+            opacity: 0.1;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: float 20s infinite ease-in-out;
+        }
+
+        .cta-section h2 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .cta-section p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.95;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--text-dark);
+            color: white;
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary-green);
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .process-flow-horizontal {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .process-step-card {
+                max-width: 100%;
+                margin-bottom: 2rem;
+            }
+
+            .process-arrow {
+                width: 4px;
+                height: 60px;
+                margin: 0.5rem auto;
+                transform: rotate(90deg);
+            }
+
+            .process-arrow::after {
+                right: auto;
+                bottom: -8px;
+                top: auto;
+                transform: translateX(-50%);
+                border-left: 8px solid transparent;
+                border-right: 8px solid transparent;
+                border-top: 12px solid var(--primary-green);
+            }
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            /* Navigation */
+            .nav-container {
+                padding: 0 1rem;
+            }
+
+            .logo {
+                font-size: 1.2rem;
+            }
+
+            .logo-icon {
+                font-size: 1.5rem;
+            }
+
+            .cta-button {
+                padding: 0.5rem 1rem;
+                font-size: 0.9rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            /* Hero Section */
+            .hero {
+                padding: 100px 1rem 2rem;
+                min-height: 90vh;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+                line-height: 1.3;
+                margin-bottom: 1rem;
+            }
+
+            .hero p {
+                font-size: 1rem;
+                margin-bottom: 1.5rem;
+                padding: 0 1rem;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+                gap: 0.75rem;
+                width: 100%;
+                padding: 0 1rem;
+            }
+
+            .btn-primary,
+            .btn-secondary {
+                width: 100%;
+                padding: 0.875rem 1.5rem;
+                font-size: 1rem;
+            }
+
+            /* Hero Icons - Smaller on mobile */
+            .hero-icon {
+                font-size: 1.8rem;
+                opacity: 0.3;
+            }
+
+            /* Sections Padding */
+            .features,
+            .benefits,
+            .active-plots,
+            .statistics,
+            .process,
+            .about,
+            .cta-section {
+                padding: 60px 1rem;
+            }
+
+            .container {
+                padding: 0;
+            }
+
+            /* Section Headers */
+            .section-header {
+                margin-bottom: 2.5rem;
+            }
+
+            .section-header h2 {
+                font-size: 1.8rem;
+                margin-bottom: 0.75rem;
+            }
+
+            .section-header p {
+                font-size: 1rem;
+            }
+
+            /* Grids */
+            .features-grid,
+            .benefits-grid,
+            .plots-grid,
+            .stats-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            /* Feature Cards */
+            .feature-card {
+                padding: 1.5rem;
+            }
+
+            .feature-icon {
+                width: 50px;
+                height: 50px;
+                font-size: 1.5rem;
+            }
+
+            .feature-card h3 {
+                font-size: 1.25rem;
+            }
+
+            .feature-card p {
+                font-size: 0.95rem;
+            }
+
+            /* Plot Cards */
+            .plot-card {
+                padding: 1.5rem;
+            }
+
+            .plot-name {
+                font-size: 1.25rem;
+            }
+
+            .plot-description {
+                font-size: 0.9rem;
+                margin-bottom: 1rem;
+            }
+
+            .plot-metrics {
+                gap: 0.75rem;
+            }
+
+            .metric-item {
+                padding: 0.75rem;
+            }
+
+            .metric-label {
+                font-size: 0.8rem;
+            }
+
+            .metric-value {
+                font-size: 1.25rem;
+            }
+
+            .btn-view-map {
+                padding: 0.625rem 1.25rem;
+                font-size: 0.9rem;
+            }
+
+            /* About Section */
+            .about-tabs {
+                gap: 0.5rem;
+                margin-bottom: 2rem;
+                padding-bottom: 0.75rem;
+            }
+
+            .about-tab {
+                padding: 0.75rem 1rem;
+                font-size: 0.85rem;
+            }
+
+            .about-content-card {
+                padding: 1.5rem;
+            }
+
+            .about-content-card h3 {
+                font-size: 1.5rem;
+                margin-bottom: 1.5rem;
+            }
+
+            .core-idea-grid,
+            .user-roles-grid,
+            .value-proposition-list {
+                grid-template-columns: 1fr;
+                gap: 1.25rem;
+            }
+
+            .core-idea-item,
+            .user-role-card,
+            .value-item {
+                padding: 1.5rem;
+            }
+
+            .user-role-icon {
+                font-size: 2.5rem;
+            }
+
+            .workflow-steps {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .workflow-section {
+                padding: 1.5rem;
+            }
+
+            /* Process Section */
+            .process-step-card {
+                padding: 1.5rem;
+                max-width: 100%;
+            }
+
+            .step-header {
+                flex-direction: column;
+                text-align: center;
+                gap: 0.75rem;
+            }
+
+            .step-number-badge {
+                width: 50px;
+                height: 50px;
+                font-size: 1.25rem;
+            }
+
+            .step-icon-large {
+                font-size: 2.5rem;
+            }
+
+            .step-title {
+                font-size: 1.1rem;
+            }
+
+            .step-description {
+                font-size: 0.9rem;
+            }
+
+            .process-arrow {
+                height: 40px;
+                width: 3px;
+            }
+
+            .process-progress {
+                padding: 2rem 1.5rem;
+            }
+
+            .progress-title {
+                font-size: 1.5rem;
+            }
+
+            .progress-stats {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1rem;
+            }
+
+            .progress-stat {
+                padding: 1rem;
+            }
+
+            .stat-icon {
+                font-size: 2rem;
+            }
+
+            .stat-value {
+                font-size: 1.5rem;
+            }
+
+            .progress-percentage {
+                font-size: 2rem;
+            }
+
+            /* Statistics */
+            .stats-tabs {
+                gap: 0.5rem;
+                margin-bottom: 2rem;
+            }
+
+            .stat-tab {
+                padding: 0.75rem 1rem;
+                font-size: 0.85rem;
+            }
+
+            .stat-card {
+                padding: 1.5rem;
+            }
+
+            .stat-icon {
+                font-size: 2.5rem;
+            }
+
+            .stat-number {
+                font-size: 2rem;
+            }
+
+            /* CTA Section */
+            .cta-section h2 {
+                font-size: 1.8rem;
+            }
+
+            .cta-section p {
+                font-size: 1rem;
+            }
+
+            /* Footer */
+            footer {
+                padding: 2rem 1rem;
+            }
+
+            .footer-links {
+                gap: 1rem;
+                font-size: 0.9rem;
+            }
+        }
+
+        /* Small Mobile (max-width: 480px) */
+        @media (max-width: 480px) {
+            .hero h1 {
+                font-size: 1.75rem;
+            }
+
+            .hero p {
+                font-size: 0.95rem;
+            }
+
+            .section-header h2 {
+                font-size: 1.5rem;
+            }
+
+            .section-header p {
+                font-size: 0.95rem;
+            }
+
+            .about-tab {
+                padding: 0.625rem 0.75rem;
+                font-size: 0.75rem;
+            }
+
+            .about-content-card {
+                padding: 1.25rem;
+            }
+
+            .about-content-card h3 {
+                font-size: 1.25rem;
+            }
+
+            .feature-card,
+            .plot-card,
+            .stat-card {
+                padding: 1.25rem;
+            }
+
+            .process-step-card {
+                padding: 1.25rem;
+            }
+
+            .progress-stats {
+                grid-template-columns: 1fr;
+            }
+
+            .progress-percentage {
+                font-size: 1.75rem;
+            }
+
+            .plot-name {
+                font-size: 1.1rem;
+            }
+
+            .metric-value {
+                font-size: 1.1rem;
+            }
+        }
+
+        /* Scroll animations */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <!-- Floating Background Icons -->
+    <div class="floating-icons">
+        <div class="floating-icon" style="left: 10%; animation-delay: 0s;">🌾</div>
+        <div class="floating-icon" style="left: 20%; animation-delay: 2s;">🌱</div>
+        <div class="floating-icon" style="left: 30%; animation-delay: 4s;">🌿</div>
+        <div class="floating-icon" style="left: 40%; animation-delay: 6s;">🌳</div>
+        <div class="floating-icon" style="left: 50%; animation-delay: 8s;">🌲</div>
+        <div class="floating-icon" style="left: 60%; animation-delay: 10s;">🌴</div>
+        <div class="floating-icon" style="left: 70%; animation-delay: 12s;">🌽</div>
+        <div class="floating-icon" style="left: 80%; animation-delay: 14s;">🌷</div>
+        <div class="floating-icon" style="left: 90%; animation-delay: 16s;">🌹</div>
+    </div>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <div class="logo">
+                <span class="logo-icon">🌱</span>
+                <span>AVIVerse NFT</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#about">Giới thiệu</a></li>
+                <li><a href="#features">Tính năng</a></li>
+                <li><a href="#benefits">Lợi ích</a></li>
+                <li><a href="#plots">Vùng trồng</a></li>
+                <li><a href="#stats">Thống kê</a></li>
+                <li><a href="#process">Quy trình</a></li>
+                <li><a href="#contact">Liên hệ</a></li>
+            </ul>
+            <a href="http://localhost:3001/login" class="cta-button">Đăng nhập</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <!-- Animated Icons Background -->
+        <div class="hero-icons">
+            <div class="hero-icon">🌾</div>
+            <div class="hero-icon">🌱</div>
+            <div class="hero-icon">🌿</div>
+            <div class="hero-icon">🌳</div>
+            <div class="hero-icon">🌲</div>
+            <div class="hero-icon">🌴</div>
+            <div class="hero-icon">🌽</div>
+            <div class="hero-icon">🌷</div>
+            <div class="hero-icon">🌹</div>
+            <div class="hero-icon">🌺</div>
+            <div class="hero-icon">🌻</div>
+            <div class="hero-icon">🌼</div>
+            <div class="hero-icon">🌸</div>
+            <div class="hero-icon">🍃</div>
+            <div class="hero-icon">🌾</div>
+            <div class="hero-icon">🌱</div>
+        </div>
+
+        <!-- Floating Particles -->
+        <div class="hero-particle" style="left: 10%; animation-delay: 0s;"></div>
+        <div class="hero-particle" style="left: 20%; animation-delay: 2s;"></div>
+        <div class="hero-particle" style="left: 30%; animation-delay: 4s;"></div>
+        <div class="hero-particle" style="left: 40%; animation-delay: 6s;"></div>
+        <div class="hero-particle" style="left: 50%; animation-delay: 8s;"></div>
+        <div class="hero-particle" style="left: 60%; animation-delay: 10s;"></div>
+        <div class="hero-particle" style="left: 70%; animation-delay: 12s;"></div>
+        <div class="hero-particle" style="left: 80%; animation-delay: 14s;"></div>
+        <div class="hero-particle" style="left: 90%; animation-delay: 16s;"></div>
+        <div class="hero-particle" style="left: 15%; animation-delay: 1s;"></div>
+        <div class="hero-particle" style="left: 25%; animation-delay: 3s;"></div>
+        <div class="hero-particle" style="left: 35%; animation-delay: 5s;"></div>
+        <div class="hero-particle" style="left: 45%; animation-delay: 7s;"></div>
+        <div class="hero-particle" style="left: 55%; animation-delay: 9s;"></div>
+        <div class="hero-particle" style="left: 65%; animation-delay: 11s;"></div>
+        <div class="hero-particle" style="left: 75%; animation-delay: 13s;"></div>
+        <div class="hero-particle" style="left: 85%; animation-delay: 15s;"></div>
+        <div class="hero-particle" style="left: 95%; animation-delay: 17s;"></div>
+
+        <div class="hero-content">
+            <h1>
+                Nền tảng <span class="highlight">Nông nghiệp Thông minh</span><br>
+                & Số hoá Trang trại
+            </h1>
+            <p>
+                Quản lý toàn bộ vòng đời sản xuất nông nghiệp từ khu vực, trang trại, 
+                lô đất đến giống, chăm sóc, thu hoạch và bán hàng. Tích hợp IoT, AI 
+                và Blockchain NFT để mang lại giá trị cao nhất.
+            </p>
+            <div class="hero-buttons">
+                <a href="http://localhost:3001/login" class="btn-primary">Bắt đầu ngay</a>
+                <a href="#features" class="btn-secondary">Tìm hiểu thêm</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="about" id="about">
+        <div class="container">
+            <div class="section-header fade-in">
+                <h2>Về AVIVerse NFT</h2>
+                <p>Nền tảng Nông nghiệp Thông minh & Số hoá Trang trại</p>
+            </div>
+
+            <div class="about-tabs">
+                <button class="about-tab active" onclick="showAboutTab('core-idea', this)">💡 Ý tưởng Cốt lõi</button>
+                <button class="about-tab" onclick="showAboutTab('user-roles', this)">👥 Đối tượng & Vai trò</button>
+                <button class="about-tab" onclick="showAboutTab('value-prop', this)">⭐ Giá trị Cốt lõi</button>
+                <button class="about-tab" onclick="showAboutTab('workflow', this)">🔄 Quy trình Nghiệp vụ</button>
+            </div>
+
+            <!-- Core Idea Tab -->
+            <div id="core-idea" class="about-content active">
+                <div class="about-content-card fade-in">
+                    <h3>💡 Ý tưởng Cốt lõi</h3>
+                    <p style="font-size: 1.1rem; color: var(--text-gray); margin-bottom: 2rem; line-height: 1.8;">
+                        AVIVerse NFT là nền tảng quản lý toàn bộ vòng đời sản xuất nông nghiệp, 
+                        từ khâu thiết lập đến thu hoạch và phân phối, kết hợp công nghệ IoT, AI và Blockchain NFT.
+                    </p>
+                    <div class="core-idea-grid">
+                        <div class="core-idea-item">
+                            <h4>🔄 Quản lý Vòng đời Toàn diện</h4>
+                            <ul>
+                                <li>Khu vực → Trang trại → Lô đất</li>
+                                <li>Giống → Chăm sóc → Thu hoạch</li>
+                                <li>Đóng gói → Bán hàng</li>
+                            </ul>
+                        </div>
+                        <div class="core-idea-item">
+                            <h4>🌐 Tích hợp IoT & AI</h4>
+                            <ul>
+                                <li>Cảm biến môi trường real-time</li>
+                                <li>Dự báo sâu bệnh thông minh</li>
+                                <li>Gợi ý tưới, bón phân tối ưu</li>
+                            </ul>
+                        </div>
+                        <div class="core-idea-item">
+                            <h4>🔗 Blockchain & NFT</h4>
+                            <ul>
+                                <li>Số hoá lô trang trại thành NFT</li>
+                                <li>Quyền lợi gắn với tài sản thật</li>
+                                <li>Minh bạch và truy xuất nguồn gốc</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- User Roles Tab -->
+            <div id="user-roles" class="about-content">
+                <div class="about-content-card fade-in">
+                    <h3>👥 Đối tượng & Vai trò Người dùng</h3>
+                    <p style="font-size: 1.1rem; color: var(--text-gray); margin-bottom: 2rem; line-height: 1.8;">
+                        Hệ thống phục vụ đa dạng đối tượng người dùng với vai trò và quyền lợi riêng biệt.
+                    </p>
+                    <div class="user-roles-grid">
+                        <div class="user-role-card">
+                            <div class="user-role-icon">🌾</div>
+                            <h4>Nông hộ / Trang trại</h4>
+                            <ul>
+                                <li>Quản lý vườn, giống, lịch chăm sóc</li>
+                                <li>Nhận cảnh báo từ IoT tự động</li>
+                                <li>Bán sản phẩm & phát hành NFT</li>
+                            </ul>
+                        </div>
+                        <div class="user-role-card">
+                            <div class="user-role-icon">💰</div>
+                            <h4>Nhà đầu tư</h4>
+                            <ul>
+                                <li>Mua NFT lô trang trại</li>
+                                <li>Nhận suất chia sản lượng / lợi nhuận</li>
+                                <li>Theo dõi tình trạng vườn real-time</li>
+                            </ul>
+                        </div>
+                        <div class="user-role-card">
+                            <div class="user-role-icon">🏪</div>
+                            <h4>Doanh nghiệp Phân phối</h4>
+                            <ul>
+                                <li>Đặt mua lô hàng trực tiếp</li>
+                                <li>Theo dõi truy xuất nguồn gốc</li>
+                                <li>Ký hợp đồng mua trước</li>
+                            </ul>
+                        </div>
+                        <div class="user-role-card">
+                            <div class="user-role-icon">🛒</div>
+                            <h4>Người tiêu dùng</h4>
+                            <ul>
+                                <li>Mua sản phẩm gắn QR truy xuất</li>
+                                <li>Mua NFT trải nghiệm</li>
+                                <li>Nhận quà định kỳ từ vườn</li>
+                            </ul>
+                        </div>
+                        <div class="user-role-card">
+                            <div class="user-role-icon">⚙️</div>
+                            <h4>Quản trị Hệ thống</h4>
+                            <ul>
+                                <li>Duyệt trang trại & NFT</li>
+                                <li>Cấu hình tiêu chuẩn canh tác</li>
+                                <li>Quản lý tranh chấp & báo cáo</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Value Proposition Tab -->
+            <div id="value-prop" class="about-content">
+                <div class="about-content-card fade-in">
+                    <h3>⭐ Giá trị Cốt lõi</h3>
+                    <p style="font-size: 1.1rem; color: var(--text-gray); margin-bottom: 2rem; line-height: 1.8;">
+                        AVIVerse NFT mang lại giá trị thiết thực cho từng đối tượng trong hệ sinh thái nông nghiệp.
+                    </p>
+                    <div class="value-proposition-list">
+                        <div class="value-item">
+                            <h4>🌾 Cho Nông dân</h4>
+                            <p>
+                                Quản lý dễ dàng, minh bạch dữ liệu, tiếp cận vốn qua NFT, 
+                                giảm phụ thuộc thương lái, tăng giá trị sản phẩm.
+                            </p>
+                        </div>
+                        <div class="value-item">
+                            <h4>💰 Cho Nhà đầu tư</h4>
+                            <p>
+                                Đầu tư gắn với tài sản thật, theo dõi trực tiếp tiến độ, 
+                                giảm rủi ro NFT rỗng, minh bạch quyền lợi.
+                            </p>
+                        </div>
+                        <div class="value-item">
+                            <h4>🏪 Cho Thị trường</h4>
+                            <p>
+                                Truy xuất nguồn gốc rõ ràng, dữ liệu canh tác chuẩn hóa, 
+                                tăng giá trị nông sản, xây dựng niềm tin người tiêu dùng.
+                            </p>
+                        </div>
+                        <div class="value-item">
+                            <h4>📊 Hiệu quả Cao</h4>
+                            <p>
+                                Tối ưu quy trình, giảm chi phí, tăng năng suất, 
+                                nâng cao chất lượng sản phẩm, bền vững môi trường.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Workflow Tab -->
+            <div id="workflow" class="about-content">
+                <div class="about-content-card fade-in">
+                    <h3>🔄 Quy trình Nghiệp vụ Tổng thể</h3>
+                    <p style="font-size: 1.1rem; color: var(--text-gray); margin-bottom: 2rem; line-height: 1.8;">
+                        Hai vòng đời chính: Sản xuất (Off-chain + IoT) và NFT & Đầu tư (On-chain + Off-chain).
+                    </p>
+                    <div class="workflow-steps">
+                        <div class="workflow-section">
+                            <h4>🌱 Vòng đời Sản xuất</h4>
+                            <div class="workflow-step">
+                                <h5>1. Thiết lập Trang trại & Bản đồ</h5>
+                                <p>Tạo Khu vực (Tỉnh → Huyện → Xã), Trang trại & Lô đất, vẽ bản đồ với Polygon GPS.</p>
+                            </div>
+                            <div class="workflow-step">
+                                <h5>2. Thiết lập Mùa vụ & Giống</h5>
+                                <p>Chọn cây trồng/giống, đặt thời gian vụ mùa, định nghĩa quy trình chuẩn canh tác.</p>
+                            </div>
+                            <div class="workflow-step">
+                                <h5>3. Nhật ký & Sensor</h5>
+                                <p>Nông dân tạo nhiệm vụ, IoT gửi dữ liệu real-time, hệ thống gợi ý tưới/bón tự động.</p>
+                            </div>
+                            <div class="workflow-step">
+                                <h5>4. Thu hoạch & Đóng gói</h5>
+                                <p>Đánh dấu thu hoạch, tạo lô sản phẩm, gắn QR truy xuất cho từng thùng/pallet.</p>
+                            </div>
+                        </div>
+                        <div class="workflow-section">
+                            <h4>🔗 Vòng đời NFT & Đầu tư</h4>
+                            <div class="workflow-step">
+                                <h5>1. Tạo NFT Lô Trang trại</h5>
+                                <p>Farm Plot NFT (dài hạn) hoặc Seasonal Harvest NFT (ngắn hạn), xác định quyền lợi.</p>
+                            </div>
+                            <div class="workflow-step">
+                                <h5>2. Mint NFT</h5>
+                                <p>Smart contract ERC-721/1155 trên Polygon, metadata gắn với lô thật, lưu IPFS.</p>
+                            </div>
+                            <div class="workflow-step">
+                                <h5>3. Bán NFT cho Nhà đầu tư</h5>
+                                <p>Niêm yết trên marketplace, thanh toán crypto/fiat, chuyển quyền sở hữu.</p>
+                            </div>
+                            <div class="workflow-step">
+                                <h5>4. Theo dõi & Cập nhật</h5>
+                                <p>Dashboard hiển thị hình ảnh, camera, dữ liệu IoT, nhật ký công việc real-time.</p>
+                            </div>
+                            <div class="workflow-step">
+                                <h5>5. Kết thúc & Phân chia Quyền lợi</h5>
+                                <p>Ghi nhận sản lượng, nhà đầu tư nhận sản phẩm hoặc bán lại trên marketplace.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <div class="container">
+            <div class="section-header fade-in">
+                <h2>Chức năng Nổi bật</h2>
+                <p>Hệ thống quản lý nông nghiệp toàn diện với công nghệ tiên tiến</p>
+            </div>
+
+            <div class="features-grid">
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">🗺️</div>
+                    <h3>Quản lý Khu vực & Trang trại</h3>
+                    <p>
+                        Quản lý phân cấp từ Tỉnh → Huyện → Xã → Trang trại → Vùng trồng. 
+                        Vẽ bản đồ lô đất chính xác với GeoJSON Polygon, tính diện tích tự động.
+                    </p>
+                </div>
+
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">📅</div>
+                    <h3>Quản lý Mùa vụ & Giống cây</h3>
+                    <p>
+                        Theo dõi toàn bộ vòng đời mùa vụ từ gieo trồng đến thu hoạch. 
+                        Danh mục giống cây với thông tin kỹ thuật chi tiết, quy trình canh tác chuẩn.
+                    </p>
+                </div>
+
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">✅</div>
+                    <h3>Nhiệm vụ & Nhật ký Canh tác</h3>
+                    <p>
+                        Tạo và quản lý nhiệm vụ canh tác (tưới, bón phân, phun thuốc...). 
+                        Nhật ký điện tử chuẩn truy xuất nguồn gốc với hình ảnh kèm theo.
+                    </p>
+                </div>
+
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">🌐</div>
+                    <h3>IoT & Cảm biến Thông minh</h3>
+                    <p>
+                        Tích hợp cảm biến môi trường (độ ẩm, nhiệt độ, pH, ánh sáng). 
+                        Cảnh báo tự động và gợi ý tưới, bón phân tối ưu dựa trên dữ liệu thực tế.
+                    </p>
+                </div>
+
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">🔗</div>
+                    <h3>Blockchain & NFT</h3>
+                    <p>
+                        Số hoá lô trang trại thành NFT để gọi vốn minh bạch. 
+                        Farm Plot NFT, Seasonal Harvest NFT, Experience NFT với quyền lợi rõ ràng.
+                    </p>
+                </div>
+
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">📱</div>
+                    <h3>Truy xuất Nguồn gốc</h3>
+                    <p>
+                        Mỗi sản phẩm có mã QR truy xuất đầy đủ thông tin: trang trại, lô, 
+                        nhật ký chăm sóc, chuẩn chứng nhận. Minh bạch và đáng tin cậy.
+                    </p>
+                </div>
+
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">🤖</div>
+                    <h3>AI Dự báo & Phân tích</h3>
+                    <p>
+                        Dự báo năng suất, cảnh báo sâu bệnh sớm. Phân tích dữ liệu IoT 
+                        để đưa ra khuyến nghị canh tác thông minh, tối ưu hiệu quả.
+                    </p>
+                </div>
+
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">👥</div>
+                    <h3>Đa Vai trò Người dùng</h3>
+                    <p>
+                        Hệ thống hỗ trợ Nông dân, Nhà đầu tư, Doanh nghiệp phân phối, 
+                        và Quản trị viên với quyền hạn và giao diện phù hợp từng đối tượng.
+                    </p>
+                </div>
+
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">💳</div>
+                    <h3>Thanh toán & Tài chính</h3>
+                    <p>
+                        Hệ thống thanh toán tích hợp, ví điện tử, quản lý dòng tiền minh bạch. 
+                        Thanh toán NFT, chia sẻ lợi nhuận tự động qua smart contract blockchain.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Benefits Section -->
+    <section class="benefits" id="benefits">
+        <div class="container">
+            <div class="section-header fade-in">
+                <h2>Giá trị Mang lại</h2>
+                <p>Lợi ích thiết thực cho từng đối tượng người dùng</p>
+            </div>
+
+            <div class="benefits-grid">
+                <div class="benefit-item fade-in">
+                    <div class="benefit-number">🌾</div>
+                    <h3>Cho Nông dân</h3>
+                    <p>Quản lý dễ dàng, minh bạch dữ liệu, tiếp cận vốn qua NFT, giảm phụ thuộc thương lái</p>
+                </div>
+
+                <div class="benefit-item fade-in">
+                    <div class="benefit-number">💰</div>
+                    <h3>Cho Nhà đầu tư</h3>
+                    <p>Đầu tư gắn với tài sản thật, theo dõi trực tiếp tiến độ, giảm rủi ro NFT rỗng</p>
+                </div>
+
+                <div class="benefit-item fade-in">
+                    <div class="benefit-number">🏪</div>
+                    <h3>Cho Thị trường</h3>
+                    <p>Truy xuất nguồn gốc rõ ràng, dữ liệu canh tác chuẩn hóa, tăng giá trị nông sản</p>
+                </div>
+
+                <div class="benefit-item fade-in">
+                    <div class="benefit-number">📊</div>
+                    <h3>Hiệu quả Cao</h3>
+                    <p>Tối ưu quy trình, giảm chi phí, tăng năng suất, nâng cao chất lượng sản phẩm</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Active Plots Section -->
+    <section class="active-plots" id="plots">
+        <div class="container">
+            <div class="section-header fade-in">
+                <h2>Vùng trồng Đang hoạt động</h2>
+                <p>Theo dõi trực tiếp các vùng trồng với dữ liệu IoT real-time</p>
+            </div>
+
+            <div class="plots-grid">
+                <div class="plot-card fade-in" data-plot-id="plot-1" data-lat="10.762622" data-lng="106.660172">
+                    <div class="plot-header">
+                        <div>
+                            <div class="plot-name">🌾 Lô Lúa Hữu Cơ A1 <span class="live-indicator">LIVE</span></div>
+                            <div class="plot-status active">Đang hoạt động</div>
+                        </div>
+                    </div>
+                    <div class="plot-description">
+                        Vùng trồng lúa hữu cơ chất lượng cao, áp dụng công nghệ IoT và canh tác thông minh
+                    </div>
+                    <div class="plot-boundary">
+                        <div class="boundary-label">
+                            <span>🗺️</span> Danh giới vùng trồng
+                        </div>
+                        <div class="boundary-visual">
+                            <div class="boundary-polygon" style="border-color: #10b981; background: rgba(16, 185, 129, 0.2);"></div>
+                        </div>
+                    </div>
+                    <div class="plot-metrics">
+                        <div class="metric-item">
+                            <div class="metric-label">💧 Độ ẩm</div>
+                            <div class="metric-value" data-metric="humidity" data-value="72">72%</div>
+                            <div class="metric-progress">
+                                <div class="metric-progress-bar" data-progress="humidity" style="width: 72%;"></div>
+                            </div>
+                        </div>
+                        <div class="metric-item">
+                            <div class="metric-label">🌱 Phát triển</div>
+                            <div class="metric-value" data-metric="growth" data-value="85">85%</div>
+                            <div class="metric-progress">
+                                <div class="metric-progress-bar" data-progress="growth" style="width: 85%;"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="last-updated">Cập nhật: <span class="update-time">vừa xong</span></div>
+                    <div class="plot-actions">
+                        <button class="btn-view-map" onclick="viewPlotOnMap('10.762622', '106.660172', 'Lô Lúa Hữu Cơ A1')">
+                            <span>🗺️</span> Xem trên Google Maps
+                        </button>
+                    </div>
+                </div>
+
+                <div class="plot-card fade-in" data-plot-id="plot-2" data-lat="10.775000" data-lng="106.670000">
+                    <div class="plot-header">
+                        <div>
+                            <div class="plot-name">🌿 Vườn Rau Sạch B2 <span class="live-indicator">LIVE</span></div>
+                            <div class="plot-status active">Đang hoạt động</div>
+                        </div>
+                    </div>
+                    <div class="plot-description">
+                        Vườn rau sạch đa dạng loại, sử dụng hệ thống tưới tự động và cảm biến môi trường
+                    </div>
+                    <div class="plot-boundary">
+                        <div class="boundary-label">
+                            <span>🗺️</span> Danh giới vùng trồng
+                        </div>
+                        <div class="boundary-visual">
+                            <div class="boundary-polygon" style="border-color: #34d399; background: rgba(52, 211, 153, 0.2);"></div>
+                        </div>
+                    </div>
+                    <div class="plot-metrics">
+                        <div class="metric-item">
+                            <div class="metric-label">💧 Độ ẩm</div>
+                            <div class="metric-value" data-metric="humidity" data-value="68">68%</div>
+                            <div class="metric-progress">
+                                <div class="metric-progress-bar" data-progress="humidity" style="width: 68%;"></div>
+                            </div>
+                        </div>
+                        <div class="metric-item">
+                            <div class="metric-label">🌱 Phát triển</div>
+                            <div class="metric-value" data-metric="growth" data-value="92">92%</div>
+                            <div class="metric-progress">
+                                <div class="metric-progress-bar" data-progress="growth" style="width: 92%;"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="last-updated">Cập nhật: <span class="update-time">vừa xong</span></div>
+                    <div class="plot-actions">
+                        <button class="btn-view-map" onclick="viewPlotOnMap('10.775000', '106.670000', 'Vườn Rau Sạch B2')">
+                            <span>🗺️</span> Xem trên Google Maps
+                        </button>
+                    </div>
+                </div>
+
+                <div class="plot-card fade-in" data-plot-id="plot-3" data-lat="10.790000" data-lng="106.680000">
+                    <div class="plot-header">
+                        <div>
+                            <div class="plot-name">🌳 Vườn Cây Ăn trái C3 <span class="live-indicator">LIVE</span></div>
+                            <div class="plot-status monitoring">Theo dõi</div>
+                        </div>
+                    </div>
+                    <div class="plot-description">
+                        Vườn cây ăn trái lâu năm, đang trong giai đoạn chăm sóc và phát triển
+                    </div>
+                    <div class="plot-boundary">
+                        <div class="boundary-label">
+                            <span>🗺️</span> Danh giới vùng trồng
+                        </div>
+                        <div class="boundary-visual">
+                            <div class="boundary-polygon" style="border-color: #059669; background: rgba(5, 150, 105, 0.2);"></div>
+                        </div>
+                    </div>
+                    <div class="plot-metrics">
+                        <div class="metric-item">
+                            <div class="metric-label">💧 Độ ẩm</div>
+                            <div class="metric-value" data-metric="humidity" data-value="65">65%</div>
+                            <div class="metric-progress">
+                                <div class="metric-progress-bar" data-progress="humidity" style="width: 65%;"></div>
+                            </div>
+                        </div>
+                        <div class="metric-item">
+                            <div class="metric-label">🌱 Phát triển</div>
+                            <div class="metric-value" data-metric="growth" data-value="78">78%</div>
+                            <div class="metric-progress">
+                                <div class="metric-progress-bar" data-progress="growth" style="width: 78%;"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="last-updated">Cập nhật: <span class="update-time">vừa xong</span></div>
+                    <div class="plot-actions">
+                        <button class="btn-view-map" onclick="viewPlotOnMap('10.790000', '106.680000', 'Vườn Cây Ăn trái C3')">
+                            <span>🗺️</span> Xem trên Google Maps
+                        </button>
+                    </div>
+                </div>
+
+                <div class="plot-card fade-in" data-plot-id="plot-4" data-lat="10.805000" data-lng="106.690000">
+                    <div class="plot-header">
+                        <div>
+                            <div class="plot-name">🌶️ Vườn Ớt Hữu cơ D4 <span class="live-indicator">LIVE</span></div>
+                            <div class="plot-status active">Đang hoạt động</div>
+                        </div>
+                    </div>
+                    <div class="plot-description">
+                        Vườn ớt hữu cơ với hệ thống giám sát nhiệt độ và độ ẩm tự động
+                    </div>
+                    <div class="plot-boundary">
+                        <div class="boundary-label">
+                            <span>🗺️</span> Danh giới vùng trồng
+                        </div>
+                        <div class="boundary-visual">
+                            <div class="boundary-polygon" style="border-color: #10b981; background: rgba(16, 185, 129, 0.2);"></div>
+                        </div>
+                    </div>
+                    <div class="plot-metrics">
+                        <div class="metric-item">
+                            <div class="metric-label">💧 Độ ẩm</div>
+                            <div class="metric-value" data-metric="humidity" data-value="75">75%</div>
+                            <div class="metric-progress">
+                                <div class="metric-progress-bar" data-progress="humidity" style="width: 75%;"></div>
+                            </div>
+                        </div>
+                        <div class="metric-item">
+                            <div class="metric-label">🌱 Phát triển</div>
+                            <div class="metric-value" data-metric="growth" data-value="88">88%</div>
+                            <div class="metric-progress">
+                                <div class="metric-progress-bar" data-progress="growth" style="width: 88%;"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="last-updated">Cập nhật: <span class="update-time">vừa xong</span></div>
+                    <div class="plot-actions">
+                        <button class="btn-view-map" onclick="viewPlotOnMap('10.805000', '106.690000', 'Vườn Ớt Hữu cơ D4')">
+                            <span>🗺️</span> Xem trên Google Maps
+                        </button>
+                    </div>
+                </div>
+
+                <div class="plot-card fade-in" data-plot-id="plot-5" data-lat="10.820000" data-lng="106.700000">
+                    <div class="plot-header">
+                        <div>
+                            <div class="plot-name">🥬 Vườn Rau Mầm E5 <span class="live-indicator">LIVE</span></div>
+                            <div class="plot-status active">Đang hoạt động</div>
+                        </div>
+                    </div>
+                    <div class="plot-description">
+                        Vườn rau mầm trong nhà kính với điều khiển khí hậu tự động
+                    </div>
+                    <div class="plot-boundary">
+                        <div class="boundary-label">
+                            <span>🗺️</span> Danh giới vùng trồng
+                        </div>
+                        <div class="boundary-visual">
+                            <div class="boundary-polygon" style="border-color: #34d399; background: rgba(52, 211, 153, 0.2);"></div>
+                        </div>
+                    </div>
+                    <div class="plot-metrics">
+                        <div class="metric-item">
+                            <div class="metric-label">💧 Độ ẩm</div>
+                            <div class="metric-value" data-metric="humidity" data-value="80">80%</div>
+                            <div class="metric-progress">
+                                <div class="metric-progress-bar" data-progress="humidity" style="width: 80%;"></div>
+                            </div>
+                        </div>
+                        <div class="metric-item">
+                            <div class="metric-label">🌱 Phát triển</div>
+                            <div class="metric-value" data-metric="growth" data-value="95">95%</div>
+                            <div class="metric-progress">
+                                <div class="metric-progress-bar" data-progress="growth" style="width: 95%;"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="last-updated">Cập nhật: <span class="update-time">vừa xong</span></div>
+                    <div class="plot-actions">
+                        <button class="btn-view-map" onclick="viewPlotOnMap('10.820000', '106.700000', 'Vườn Rau Mầm E5')">
+                            <span>🗺️</span> Xem trên Google Maps
+                        </button>
+                    </div>
+                </div>
+
+                <div class="plot-card fade-in">
+                    <div class="plot-header">
+                        <div>
+                            <div class="plot-name">🌾 Lô Lúa Thơm F6</div>
+                            <div class="plot-status monitoring">Theo dõi</div>
+                        </div>
+                    </div>
+                    <div class="plot-description">
+                        Lô lúa thơm đặc sản, đang trong giai đoạn chín vàng, sẵn sàng thu hoạch
+                    </div>
+                    <div class="plot-boundary">
+                        <div class="boundary-label">
+                            <span>🗺️</span> Danh giới vùng trồng
+                        </div>
+                        <div class="boundary-visual">
+                            <div class="boundary-polygon" style="border-color: #059669; background: rgba(5, 150, 105, 0.2);"></div>
+                        </div>
+                    </div>
+                    <div class="plot-metrics">
+                        <div class="metric-item">
+                            <div class="metric-label">💧 Độ ẩm</div>
+                            <div class="metric-value">70%</div>
+                            <div class="metric-progress">
+                                <div class="metric-progress-bar" style="width: 70%;"></div>
+                            </div>
+                        </div>
+                        <div class="metric-item">
+                            <div class="metric-label">🌱 Phát triển</div>
+                            <div class="metric-value">98%</div>
+                            <div class="metric-progress">
+                                <div class="metric-progress-bar" style="width: 98%;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Statistics Section -->
+    <section class="statistics" id="stats">
+        <div class="container">
+            <div class="section-header fade-in">
+                <h2>Thống kê & Lịch sử</h2>
+                <p>Theo dõi thành tích và lịch sử hoạt động của các vùng trồng</p>
+            </div>
+
+            <div class="stats-tabs">
+                <button class="stat-tab active" onclick="showStats('overview', this)">Tổng quan</button>
+                <button class="stat-tab" onclick="showStats('harvests', this)">Thu hoạch</button>
+                <button class="stat-tab" onclick="showStats('nfts', this)">NFT & Số hóa</button>
+                <button class="stat-tab" onclick="showStats('revenue', this)">Doanh số</button>
+            </div>
+
+            <!-- Overview Tab -->
+            <div id="overview" class="stats-content active">
+                <div class="stats-grid">
+                    <div class="stat-card fade-in">
+                        <div class="stat-icon">🌾</div>
+                        <div class="stat-number">24</div>
+                        <div class="stat-label">Vùng trồng hoạt động</div>
+                    </div>
+                    <div class="stat-card fade-in">
+                        <div class="stat-icon">📅</div>
+                        <div class="stat-number">156</div>
+                        <div class="stat-label">Đợt thu hoạch</div>
+                    </div>
+                    <div class="stat-card fade-in">
+                        <div class="stat-icon">🔗</div>
+                        <div class="stat-number">892</div>
+                        <div class="stat-label">Sản phẩm NFT</div>
+                    </div>
+                    <div class="stat-card fade-in">
+                        <div class="stat-icon">💰</div>
+                        <div class="stat-number">12.5B</div>
+                        <div class="stat-label">Tổng doanh số (VNĐ)</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Harvests Tab -->
+            <div id="harvests" class="stats-content">
+                <div class="history-timeline">
+                    <div class="timeline-item fade-in">
+                        <div class="timeline-date">Tháng 12/2024</div>
+                        <div class="timeline-title">🌾 Thu hoạch Lúa Hữu cơ A1</div>
+                        <div class="timeline-details">
+                            Thu hoạch 15 tấn lúa hữu cơ chất lượng cao. Tất cả sản phẩm đã được số hóa và gắn QR code truy xuất nguồn gốc.
+                        </div>
+                    </div>
+                    <div class="timeline-item fade-in">
+                        <div class="timeline-date">Tháng 11/2024</div>
+                        <div class="timeline-title">🌿 Thu hoạch Rau Sạch B2</div>
+                        <div class="timeline-details">
+                            Thu hoạch 8 tấn rau sạch đa dạng loại. Sản phẩm được đóng gói và phân phối đến các siêu thị lớn.
+                        </div>
+                    </div>
+                    <div class="timeline-item fade-in">
+                        <div class="timeline-date">Tháng 10/2024</div>
+                        <div class="timeline-title">🌶️ Thu hoạch Ớt Hữu cơ D4</div>
+                        <div class="timeline-details">
+                            Thu hoạch 3 tấn ớt hữu cơ. 80% sản phẩm đã được số hóa thành NFT và bán cho nhà đầu tư.
+                        </div>
+                    </div>
+                    <div class="timeline-item fade-in">
+                        <div class="timeline-date">Tháng 9/2024</div>
+                        <div class="timeline-title">🌳 Thu hoạch Cây Ăn trái C3</div>
+                        <div class="timeline-details">
+                            Thu hoạch 20 tấn trái cây các loại. Tạo 150 NFT đại diện cho các lô sản phẩm.
+                        </div>
+                    </div>
+                    <div class="timeline-item fade-in">
+                        <div class="timeline-date">Tháng 8/2024</div>
+                        <div class="timeline-title">🥬 Thu hoạch Rau Mầm E5</div>
+                        <div class="timeline-details">
+                            Thu hoạch 5 tấn rau mầm. Tất cả sản phẩm đạt chuẩn hữu cơ và được chứng nhận.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- NFTs Tab -->
+            <div id="nfts" class="stats-content">
+                <div class="stats-grid">
+                    <div class="stat-card fade-in">
+                        <div class="stat-icon">🔗</div>
+                        <div class="stat-number">892</div>
+                        <div class="stat-label">Tổng số NFT đã phát hành</div>
+                    </div>
+                    <div class="stat-card fade-in">
+                        <div class="stat-icon">🌾</div>
+                        <div class="stat-number">456</div>
+                        <div class="stat-label">Farm Plot NFT</div>
+                    </div>
+                    <div class="stat-card fade-in">
+                        <div class="stat-icon">📦</div>
+                        <div class="stat-number">312</div>
+                        <div class="stat-label">Harvest NFT</div>
+                    </div>
+                    <div class="stat-card fade-in">
+                        <div class="stat-icon">🎫</div>
+                        <div class="stat-number">124</div>
+                        <div class="stat-label">Experience NFT</div>
+                    </div>
+                </div>
+                <div class="history-timeline" style="margin-top: 3rem;">
+                    <div class="timeline-item fade-in">
+                        <div class="timeline-date">Tháng 12/2024</div>
+                        <div class="timeline-title">🔗 Phát hành 150 NFT Lúa Hữu cơ</div>
+                        <div class="timeline-details">
+                            Tạo 150 NFT đại diện cho 15 tấn lúa hữu cơ. Mỗi NFT = 100kg lúa. Đã bán hết trong 2 tuần.
+                        </div>
+                    </div>
+                    <div class="timeline-item fade-in">
+                        <div class="timeline-date">Tháng 11/2024</div>
+                        <div class="timeline-title">🔗 Phát hành 80 NFT Rau Sạch</div>
+                        <div class="timeline-details">
+                            Tạo 80 NFT cho 8 tấn rau sạch. Nhà đầu tư có quyền nhận sản phẩm hoặc bán lại trên marketplace.
+                        </div>
+                    </div>
+                    <div class="timeline-item fade-in">
+                        <div class="timeline-date">Tháng 10/2024</div>
+                        <div class="timeline-title">🔗 Phát hành 30 NFT Ớt Hữu cơ</div>
+                        <div class="timeline-details">
+                            Tạo 30 NFT cho 3 tấn ớt. 100% đã được mua bởi các nhà đầu tư trong và ngoài nước.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Revenue Tab -->
+            <div id="revenue" class="stats-content">
+                <div class="stats-grid">
+                    <div class="stat-card fade-in">
+                        <div class="stat-icon">💰</div>
+                        <div class="stat-number">12.5B</div>
+                        <div class="stat-label">Tổng doanh số (VNĐ)</div>
+                    </div>
+                    <div class="stat-card fade-in">
+                        <div class="stat-icon">📈</div>
+                        <div class="stat-number">+28%</div>
+                        <div class="stat-label">Tăng trưởng so với năm trước</div>
+                    </div>
+                    <div class="stat-card fade-in">
+                        <div class="stat-icon">🎯</div>
+                        <div class="stat-number">8.2B</div>
+                        <div class="stat-label">Doanh số từ NFT</div>
+                    </div>
+                    <div class="stat-card fade-in">
+                        <div class="stat-icon">💵</div>
+                        <div class="stat-number">4.3B</div>
+                        <div class="stat-label">Doanh số bán sản phẩm</div>
+                    </div>
+                </div>
+                <div class="revenue-chart fade-in">
+                    <h3 style="margin-bottom: 1rem; color: var(--text-dark);">Biểu đồ Doanh số theo Tháng</h3>
+                    <div class="chart-bars">
+                        <div style="flex-direction: column; display: flex; align-items: center;">
+                            <div class="chart-bar" style="height: 60%;"></div>
+                            <div class="chart-label">T8</div>
+                        </div>
+                        <div style="flex-direction: column; display: flex; align-items: center;">
+                            <div class="chart-bar" style="height: 75%;"></div>
+                            <div class="chart-label">T9</div>
+                        </div>
+                        <div style="flex-direction: column; display: flex; align-items: center;">
+                            <div class="chart-bar" style="height: 85%;"></div>
+                            <div class="chart-label">T10</div>
+                        </div>
+                        <div style="flex-direction: column; display: flex; align-items: center;">
+                            <div class="chart-bar" style="height: 90%;"></div>
+                            <div class="chart-label">T11</div>
+                        </div>
+                        <div style="flex-direction: column; display: flex; align-items: center;">
+                            <div class="chart-bar" style="height: 100%;"></div>
+                            <div class="chart-label">T12</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Process Section -->
+    <section class="process" id="process">
+        <div class="container">
+            <div class="section-header fade-in">
+                <h2>Hành trình Số hóa Nông nghiệp</h2>
+                <p>6 bước đơn giản để biến trang trại thành tài sản số có giá trị</p>
+            </div>
+
+            <div class="process-journey">
+                <!-- Horizontal Flow -->
+                <div class="process-flow-horizontal">
+                    <div class="process-step-card fade-in">
+                        <div class="step-header">
+                            <div class="step-number-badge">1</div>
+                            <div class="step-icon-large">🏗️</div>
+                        </div>
+                        <h3 class="step-title">Khởi tạo & Thiết lập</h3>
+                        <p class="step-description">
+                            Tạo hồ sơ trang trại, vẽ bản đồ chính xác với công nghệ vệ tinh, 
+                            xác định ranh giới và diện tích tự động.
+                        </p>
+                        <ul class="step-features">
+                            <li class="step-feature">Quản lý phân cấp địa lý</li>
+                            <li class="step-feature">Bản đồ vệ tinh chính xác</li>
+                            <li class="step-feature">Tính toán diện tích tự động</li>
+                        </ul>
+                    </div>
+
+                    <div class="process-arrow"></div>
+
+                    <div class="process-step-card fade-in">
+                        <div class="step-header">
+                            <div class="step-number-badge">2</div>
+                            <div class="step-icon-large">📅</div>
+                        </div>
+                        <h3 class="step-title">Lập kế hoạch Mùa vụ</h3>
+                        <p class="step-description">
+                            Chọn giống cây phù hợp, thiết lập lịch canh tác, 
+                            định nghĩa quy trình chuẩn và mục tiêu sản lượng.
+                        </p>
+                        <ul class="step-features">
+                            <li class="step-feature">Danh mục giống cây đa dạng</li>
+                            <li class="step-feature">Lịch canh tác thông minh</li>
+                            <li class="step-feature">Dự báo năng suất</li>
+                        </ul>
+                    </div>
+
+                    <div class="process-arrow"></div>
+
+                    <div class="process-step-card fade-in">
+                        <div class="step-header">
+                            <div class="step-number-badge">3</div>
+                            <div class="step-icon-large">🌱</div>
+                        </div>
+                        <h3 class="step-title">Canh tác Thông minh</h3>
+                        <p class="step-description">
+                            IoT giám sát 24/7, hệ thống cảnh báo tự động, 
+                            gợi ý tưới tiêu và chăm sóc tối ưu dựa trên dữ liệu thực tế.
+                        </p>
+                        <ul class="step-features">
+                            <li class="step-feature">Cảm biến IoT real-time</li>
+                            <li class="step-feature">Nhật ký điện tử đầy đủ</li>
+                            <li class="step-feature">AI gợi ý canh tác</li>
+                        </ul>
+                    </div>
+
+                    <div class="process-arrow"></div>
+
+                    <div class="process-step-card fade-in">
+                        <div class="step-header">
+                            <div class="step-number-badge">4</div>
+                            <div class="step-icon-large">🌾</div>
+                        </div>
+                        <h3 class="step-title">Thu hoạch & Số hóa</h3>
+                        <p class="step-description">
+                            Đánh dấu thu hoạch, tạo lô sản phẩm, gắn QR code truy xuất nguồn gốc, 
+                            đảm bảo minh bạch từng sản phẩm.
+                        </p>
+                        <ul class="step-features">
+                            <li class="step-feature">Ghi nhận thu hoạch chi tiết</li>
+                            <li class="step-feature">QR code truy xuất</li>
+                            <li class="step-feature">Chứng nhận chất lượng</li>
+                        </ul>
+                    </div>
+
+                    <div class="process-arrow"></div>
+
+                    <div class="process-step-card fade-in">
+                        <div class="step-header">
+                            <div class="step-number-badge">5</div>
+                            <div class="step-icon-large">🔗</div>
+                        </div>
+                        <h3 class="step-title">Phát hành NFT</h3>
+                        <p class="step-description">
+                            Tạo NFT đại diện quyền sở hữu và quyền lợi, 
+                            bán cho nhà đầu tư trên nền tảng blockchain minh bạch.
+                        </p>
+                        <ul class="step-features">
+                            <li class="step-feature">NFT gắn với tài sản thật</li>
+                            <li class="step-feature">Marketplace minh bạch</li>
+                            <li class="step-feature">Smart contract tự động</li>
+                        </ul>
+                    </div>
+
+                    <div class="process-arrow"></div>
+
+                    <div class="process-step-card fade-in">
+                        <div class="step-header">
+                            <div class="step-number-badge">6</div>
+                            <div class="step-icon-large">💰</div>
+                        </div>
+                        <h3 class="step-title">Phân phối & Lợi nhuận</h3>
+                        <p class="step-description">
+                            Nhà đầu tư nhận sản phẩm hoặc bán lại NFT, 
+                            nông dân có nguồn vốn ổn định, tạo vòng tuần hoàn bền vững.
+                        </p>
+                        <ul class="step-features">
+                            <li class="step-feature">Phân phối tự động</li>
+                            <li class="step-feature">Thanh toán minh bạch</li>
+                            <li class="step-feature">Tái đầu tư dễ dàng</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Progress Indicator -->
+                <div class="process-progress fade-in">
+                    <div class="progress-header">
+                        <h3 class="progress-title">📊 Tiến độ Triển khai</h3>
+                        <p style="color: var(--text-gray); font-size: 1.1rem;">Theo dõi quá trình số hóa trang trại của bạn</p>
+                    </div>
+
+                    <!-- Statistics -->
+                    <div class="progress-stats">
+                        <div class="progress-stat">
+                            <span class="stat-icon">🏗️</span>
+                            <div class="stat-value" data-target="156">0</div>
+                            <div class="stat-label">Trang trại đã số hóa</div>
+                        </div>
+                        <div class="progress-stat">
+                            <span class="stat-icon">🔗</span>
+                            <div class="stat-value" data-target="892">0</div>
+                            <div class="stat-label">NFT đã phát hành</div>
+                        </div>
+                        <div class="progress-stat">
+                            <span class="stat-icon">🌾</span>
+                            <div class="stat-value" data-target="124">0</div>
+                            <div class="stat-label">Đợt thu hoạch</div>
+                        </div>
+                        <div class="progress-stat">
+                            <span class="stat-icon">💰</span>
+                            <div class="stat-value" data-target="12.5">0</div>
+                            <div class="stat-label">Tỷ VNĐ doanh số</div>
+                        </div>
+                    </div>
+
+                    <!-- Progress Percentage -->
+                    <div class="progress-percentage">
+                        <span id="progressPercent">0</span><span style="font-size: 1.5rem;">%</span>
+                    </div>
+
+                    <!-- Progress Bar -->
+                    <div class="progress-bar-container">
+                        <div class="progress-bar" id="processProgress" style="width: 0%;"></div>
+                    </div>
+
+                    <!-- Progress Steps -->
+                    <div class="progress-steps">
+                        <div class="progress-step active" data-step="1">
+                            <span class="progress-step-icon">🏗️</span>
+                            <div class="progress-step-label">Thiết lập</div>
+                        </div>
+                        <div class="progress-step" data-step="2">
+                            <span class="progress-step-icon">📅</span>
+                            <div class="progress-step-label">Lập kế hoạch</div>
+                        </div>
+                        <div class="progress-step" data-step="3">
+                            <span class="progress-step-icon">🌱</span>
+                            <div class="progress-step-label">Canh tác</div>
+                        </div>
+                        <div class="progress-step" data-step="4">
+                            <span class="progress-step-icon">🌾</span>
+                            <div class="progress-step-label">Thu hoạch</div>
+                        </div>
+                        <div class="progress-step" data-step="5">
+                            <span class="progress-step-icon">🔗</span>
+                            <div class="progress-step-label">Phát hành NFT</div>
+                        </div>
+                        <div class="progress-step" data-step="6">
+                            <span class="progress-step-icon">✅</span>
+                            <div class="progress-step-label">Hoàn thành</div>
+                        </div>
+                    </div>
+
+                    <!-- Progress Details -->
+                    <div class="progress-details" id="progressDetails">
+                        <div class="progress-details-title">
+                            <span>📋</span>
+                            <span id="detailsTitle">Bước 1: Thiết lập Trang trại</span>
+                        </div>
+                        <ul class="progress-details-list" id="detailsList">
+                            <li class="progress-details-item">Tạo hồ sơ trang trại chi tiết</li>
+                            <li class="progress-details-item">Vẽ bản đồ vệ tinh chính xác</li>
+                            <li class="progress-details-item">Xác định ranh giới và diện tích</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section" id="contact">
+        <div class="container">
+            <h2>Bắt đầu Hành trình Nông nghiệp Thông minh</h2>
+            <p>Tham gia cùng hàng ngàn nông dân và nhà đầu tư đã tin tưởng AVIVerse NFT</p>
+            <div class="hero-buttons">
+                <a href="http://localhost:3001/login" class="btn-primary" style="background: white; color: var(--primary-green);">
+                    Đăng ký Ngay
+                </a>
+                <a href="http://localhost:3001/login" class="btn-secondary" style="background: transparent; border-color: white; color: white;">
+                    Đăng nhập
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-links">
+                <a href="#features">Tính năng</a>
+                <a href="#benefits">Lợi ích</a>
+                <a href="#plots">Vùng trồng</a>
+                <a href="#stats">Thống kê</a>
+                <a href="#process">Quy trình</a>
+                <a href="http://localhost:3001/login">CMS Admin</a>
+            </div>
+            <p>&copy; 2025 AVIVerse NFT. Tất cả quyền được bảo lưu.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Scroll animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.fade-in').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Navbar scroll effect
+        let lastScroll = 0;
+        const navbar = document.querySelector('nav');
+        window.addEventListener('scroll', () => {
+            const currentScroll = window.pageYOffset;
+            if (currentScroll > 100) {
+                navbar.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.15)';
+            } else {
+                navbar.style.boxShadow = '0 2px 10px rgba(0, 0, 0, 0.1)';
+            }
+            lastScroll = currentScroll;
+        });
+
+        // Add staggered animation to process steps
+        const processSteps = document.querySelectorAll('.process-step-card');
+        processSteps.forEach((step, index) => {
+            step.style.animationDelay = `${index * 0.15}s`;
+        });
+
+        // Animate progress bar and stats on scroll
+        const progressBar = document.getElementById('processProgress');
+        const progressSteps = document.querySelectorAll('.progress-step');
+        const progressPercent = document.getElementById('progressPercent');
+        const progressDetails = document.getElementById('progressDetails');
+        const detailsTitle = document.getElementById('detailsTitle');
+        const detailsList = document.getElementById('detailsList');
+        const statValues = document.querySelectorAll('.stat-value');
+        
+        const stepDetails = {
+            1: {
+                title: 'Bước 1: Thiết lập Trang trại',
+                items: ['Tạo hồ sơ trang trại chi tiết', 'Vẽ bản đồ vệ tinh chính xác', 'Xác định ranh giới và diện tích']
+            },
+            2: {
+                title: 'Bước 2: Lập kế hoạch Mùa vụ',
+                items: ['Chọn giống cây phù hợp', 'Thiết lập lịch canh tác', 'Định nghĩa quy trình chuẩn']
+            },
+            3: {
+                title: 'Bước 3: Canh tác Thông minh',
+                items: ['Lắp đặt cảm biến IoT', 'Ghi nhận nhật ký canh tác', 'Nhận gợi ý từ AI']
+            },
+            4: {
+                title: 'Bước 4: Thu hoạch & Số hóa',
+                items: ['Đánh dấu ngày thu hoạch', 'Tạo lô sản phẩm', 'Gắn QR code truy xuất']
+            },
+            5: {
+                title: 'Bước 5: Phát hành NFT',
+                items: ['Tạo NFT trên blockchain', 'Đăng bán trên marketplace', 'Ký smart contract']
+            },
+            6: {
+                title: 'Bước 6: Hoàn thành',
+                items: ['Phân phối sản phẩm', 'Thanh toán tự động', 'Tái đầu tư cho mùa vụ tiếp theo']
+            }
+        };
+
+        function updateDetails(step) {
+            const details = stepDetails[step];
+            if (details) {
+                detailsTitle.textContent = details.title;
+                detailsList.innerHTML = details.items.map(item => 
+                    `<li class="progress-details-item">${item}</li>`
+                ).join('');
+                progressDetails.classList.add('show');
+            }
+        }
+
+        function animateCounter(element, target, suffix = '') {
+            const duration = 2000;
+            const start = 0;
+            const increment = target / (duration / 16);
+            let current = start;
+
+            const timer = setInterval(() => {
+                current += increment;
+                if (current >= target) {
+                    element.textContent = target + suffix;
+                    clearInterval(timer);
+                } else {
+                    if (suffix === '') {
+                        element.textContent = Math.floor(current);
+                    } else {
+                        element.textContent = current.toFixed(1) + suffix;
+                    }
+                }
+            }, 16);
+        }
+
+        function animateProgress(percent) {
+            let current = 0;
+            const increment = percent / 100;
+            const timer = setInterval(() => {
+                current += increment;
+                if (current >= percent) {
+                    current = percent;
+                    clearInterval(timer);
+                }
+                progressBar.style.width = current + '%';
+                progressPercent.textContent = Math.floor(current);
+            }, 20);
+        }
+
+        if (progressBar) {
+            const progressObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting && !entry.target.classList.contains('animated')) {
+                        entry.target.classList.add('animated');
+                        
+                        // Animate statistics
+                        statValues.forEach(stat => {
+                            const target = parseFloat(stat.getAttribute('data-target'));
+                            const suffix = stat.textContent.includes('Tỷ') ? 'Tỷ' : '';
+                            animateCounter(stat, target, suffix);
+                        });
+
+                        // Animate progress bar and percentage
+                        setTimeout(() => {
+                            animateProgress(100);
+                        }, 500);
+
+                        // Activate steps sequentially with details
+                        progressSteps.forEach((step, index) => {
+                            setTimeout(() => {
+                                step.classList.add('active');
+                                updateDetails(index + 1);
+                                
+                                // Mark previous steps as completed
+                                if (index > 0) {
+                                    progressSteps[index - 1].classList.remove('active');
+                                    progressSteps[index - 1].classList.add('completed');
+                                }
+                                
+                                // Mark last step as completed when done
+                                if (index === progressSteps.length - 1) {
+                                    setTimeout(() => {
+                                        step.classList.add('completed');
+                                    }, 500);
+                                }
+                            }, 800 + (index * 400));
+                        });
+                    }
+                });
+            }, { threshold: 0.2 });
+
+            progressObserver.observe(progressBar.parentElement.parentElement);
+        }
+
+        // Add click handlers to steps
+        progressSteps.forEach((step, index) => {
+            step.addEventListener('click', () => {
+                updateDetails(index + 1);
+                const percent = ((index + 1) / progressSteps.length) * 100;
+                animateProgress(percent);
+            });
+        });
+
+        // Statistics tabs functionality
+        function showStats(tabName, element) {
+            // Hide all tabs
+            document.querySelectorAll('.stat-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.stats-content').forEach(content => {
+                content.classList.remove('active');
+            });
+
+            // Show selected tab
+            element.classList.add('active');
+            document.getElementById(tabName).classList.add('active');
+        }
+
+        // About tabs functionality
+        function showAboutTab(tabName, element) {
+            // Hide all tabs
+            document.querySelectorAll('.about-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.about-content').forEach(content => {
+                content.classList.remove('active');
+            });
+
+            // Show selected tab
+            element.classList.add('active');
+            document.getElementById(tabName).classList.add('active');
+        }
+
+        // Real-time metric updates (demo)
+        function updateMetrics() {
+            const metrics = document.querySelectorAll('.metric-progress-bar');
+            metrics.forEach(bar => {
+                const currentWidth = parseInt(bar.style.width);
+                const variation = Math.floor(Math.random() * 5) - 2; // -2 to +2
+                const newWidth = Math.max(50, Math.min(100, currentWidth + variation));
+                bar.style.width = newWidth + '%';
+            });
+        }
+
+        // Update metrics every 5 seconds
+        setInterval(updateMetrics, 5000);
+
+        // Animate numbers on scroll
+        function animateNumbers() {
+            const statNumbers = document.querySelectorAll('.stat-number');
+            statNumbers.forEach(stat => {
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting && !entry.target.classList.contains('animated')) {
+                            entry.target.classList.add('animated');
+                            const finalValue = entry.target.textContent;
+                            const isNumber = !isNaN(parseFloat(finalValue.replace(/[^\d.]/g, '')));
+                            if (isNumber) {
+                                const numValue = parseFloat(finalValue.replace(/[^\d.]/g, ''));
+                                const suffix = finalValue.replace(/[\d.,]/g, '');
+                                let current = 0;
+                                const increment = numValue / 50;
+                                const timer = setInterval(() => {
+                                    current += increment;
+                                    if (current >= numValue) {
+                                        entry.target.textContent = finalValue;
+                                        clearInterval(timer);
+                                    } else {
+                                        entry.target.textContent = Math.floor(current).toLocaleString() + suffix;
+                                    }
+                                }, 30);
+                            }
+                        }
+                    });
+                });
+                observer.observe(stat);
+            });
+        }
+
+        animateNumbers();
+
+        // Real-time updates simulation (sau này sẽ thay bằng WebSocket)
+        function updatePlotMetrics() {
+            const plotCards = document.querySelectorAll('.plot-card[data-plot-id]');
+            
+            plotCards.forEach(card => {
+                const humidityValue = card.querySelector('[data-metric="humidity"]');
+                const growthValue = card.querySelector('[data-metric="growth"]');
+                const humidityProgress = card.querySelector('[data-progress="humidity"]');
+                const growthProgress = card.querySelector('[data-progress="growth"]');
+                const updateTime = card.querySelector('.update-time');
+                
+                if (humidityValue && growthValue) {
+                    // Simulate real-time updates (variation ±2%)
+                    const currentHumidity = parseFloat(humidityValue.getAttribute('data-value'));
+                    const currentGrowth = parseFloat(growthValue.getAttribute('data-value'));
+                    
+                    const newHumidity = Math.max(50, Math.min(100, currentHumidity + (Math.random() * 4 - 2)));
+                    const newGrowth = Math.max(60, Math.min(100, currentGrowth + (Math.random() * 2 - 1)));
+                    
+                    // Animate value change
+                    humidityValue.classList.add('updating');
+                    growthValue.classList.add('updating');
+                    
+                    setTimeout(() => {
+                        humidityValue.textContent = Math.round(newHumidity) + '%';
+                        humidityValue.setAttribute('data-value', newHumidity);
+                        humidityProgress.style.width = newHumidity + '%';
+                        
+                        growthValue.textContent = Math.round(newGrowth) + '%';
+                        growthValue.setAttribute('data-value', newGrowth);
+                        growthProgress.style.width = newGrowth + '%';
+                        
+                        humidityValue.classList.remove('updating');
+                        growthValue.classList.remove('updating');
+                        
+                        // Update timestamp
+                        if (updateTime) {
+                            const now = new Date();
+                            const timeStr = now.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+                            updateTime.textContent = timeStr;
+                        }
+                    }, 250);
+                }
+            });
+        }
+
+        // Update metrics every 5 seconds (simulating IoT updates)
+        // Sau này sẽ thay bằng WebSocket: socket.on('iot-data', updatePlotMetrics)
+        setInterval(updatePlotMetrics, 5000);
+
+        // Function to view plot on Google Maps
+        function viewPlotOnMap(lat, lng, plotName) {
+            // Open Google Maps in new tab
+            const googleMapsUrl = `https://www.google.com/maps?q=${lat},${lng}&ll=${lat},${lng}&z=15`;
+            window.open(googleMapsUrl, '_blank');
+            
+            // Alternative: Embed Google Maps in modal (uncomment if needed)
+            // showMapModal(lat, lng, plotName);
+        }
+
+        // Optional: Show map in modal (for future enhancement)
+        function showMapModal(lat, lng, plotName) {
+            const modal = document.createElement('div');
+            modal.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: rgba(0, 0, 0, 0.8);
+                z-index: 10000;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            `;
+            
+            modal.innerHTML = `
+                <div style="background: white; border-radius: 16px; padding: 2rem; max-width: 90vw; max-height: 90vh; position: relative;">
+                    <button onclick="this.closest('div[style*=\"position: fixed\"]').remove()" 
+                            style="position: absolute; top: 1rem; right: 1rem; background: #ef4444; color: white; border: none; border-radius: 50%; width: 32px; height: 32px; cursor: pointer; font-size: 1.2rem;">×</button>
+                    <h3 style="margin-bottom: 1rem;">${plotName}</h3>
+                    <iframe 
+                        width="800" 
+                        height="600" 
+                        style="border:0" 
+                        loading="lazy" 
+                        allowfullscreen
+                        src="https://www.google.com/maps/embed/v1/place?key=YOUR_API_KEY&q=${lat},${lng}&zoom=15">
+                    </iframe>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+        }
+    </script>
+</body>
+</html>

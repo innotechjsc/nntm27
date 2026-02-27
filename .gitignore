@@ -1,0 +1,39 @@
+# Dependencies
+node_modules/
+
+# Env (không đẩy secret lên GitHub)
+.env
+.env.local
+.env.*.local
+
+# Logs & OS
+*.log
+.DS_Store
+Thumbs.db
+
+# Build
+dist/
+build/
+.next/
+out/
+
+# Uploads / runtime
+api/uploads/
+*.zip
+*.rar
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Prisma (giữ migrations, bỏ file generate)
+# prisma/migrations/  ← nên commit migrations
+
+# Test / coverage
+coverage/
+.nyc_output/
+
+# Nested git (tránh add nhầm repo con)
+git/

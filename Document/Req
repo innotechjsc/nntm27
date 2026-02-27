@@ -1,0 +1,130 @@
+01_VISION_STRATEGY/01_Product_Vision.md
+# Product Vision – AgriVerse NFT
+
+## 1. Product Statement
+AgriVerse NFT là nền tảng nông nghiệp thông minh, cho phép:
+- Nông dân quản lý toàn bộ hoạt động canh tác bằng dữ liệu
+- Số hóa lô trang trại thành NFT để gọi vốn minh bạch
+- Kết nối trực tiếp nông dân – nhà đầu tư – thị trường
+
+## 2. Product Scope
+- Farm & Plot Management
+- IoT & Nhật ký canh tác
+- Truy xuất nguồn gốc
+- NFT đại diện quyền lợi mùa vụ / lô
+
+## 3. Target Market
+- Nông dân & Hợp tác xã (core)
+- Nhà đầu tư nông nghiệp (secondary)
+- Doanh nghiệp phân phối (later)
+
+## 4. Non-goals
+- Không thay thế sổ đỏ / quyền sở hữu đất
+- Không là sàn crypto trading
+
+2️⃣ 01_VISION_STRATEGY/03_Core_Value_Proposition.md
+
+(fix sẵn theo yêu cầu: Farmer-first)
+
+# Core Value Proposition
+
+## 1. Với Nông Dân (Core)
+- Quản lý nông nghiệp dễ dùng, không cần kỹ thuật
+- Minh bạch dữ liệu canh tác → tăng giá trị nông sản
+- Tiếp cận vốn không cần thế chấp thông qua NFT
+- Giảm phụ thuộc thương lái
+
+## 2. Với Nhà Đầu Tư
+- Đầu tư gắn với tài sản & sản lượng thật
+- Theo dõi trực tiếp tiến độ canh tác
+- Giảm rủi ro “NFT rỗng”
+
+## 3. Với Thị Trường
+- Truy xuất nguồn gốc rõ ràng
+- Dữ liệu canh tác chuẩn hóa
+
+3️⃣ 03_BUSINESS_PROCESS/02_Farm_Lifecycle.md
+# Farm Lifecycle
+
+1. Tạo Trang Trại
+2. Tạo Lô (Plot)
+3. Vẽ ranh giới lô (Polygon)
+4. Gán cây trồng & mùa vụ
+5. Thực hiện canh tác (task + IoT)
+6. Thu hoạch
+7. Tạo sản phẩm & QR
+8. (Optional) Phát hành NFT
+
+4️⃣ 04_FUNCTIONAL_SPEC/02_Farm_Plot_Drawing_Tool.md
+# Farm Plot Drawing Tool – Functional Spec
+
+## 1. Purpose
+Cho phép người dùng xác định chính xác ranh giới lô trang trại trên bản đồ vệ tinh.
+
+## 2. Actors
+- Farmer
+- Farm Admin
+- System Admin
+
+## 3. Main Features
+- Vẽ polygon trên Google Maps Satellite
+- Chỉnh sửa / xoá polygon
+- Tính diện tích tự động
+- Lưu polygon dạng GeoJSON
+
+## 4. Business Rules
+- Polygon phải khép kín
+- Tối thiểu 3 điểm
+- Không self-intersection
+- Diện tích > min threshold
+
+## 5. Output
+- Plot boundary được lưu & dùng cho NFT / truy xuất
+
+5️⃣ 05_UI_UX_SPEC/02_Farm_Plot_Drawing_UI.md
+# UI Spec – Farm Plot Drawing Tool
+
+## Screen Purpose
+Xác định ranh giới lô để quản lý & số hóa.
+
+## Layout
+- Left panel: plot info + controls
+- Right: satellite map
+
+## States
+- Empty
+- Drawing
+- Editing
+- Saved
+- Error
+
+## Actions
+- Start drawing
+- Finish
+- Edit
+- Save
+- Export GeoJSON
+
+6️⃣ 09_BLOCKCHAIN_NFT/03_NFT_Metadata_Schema.md
+# NFT Metadata Schema – Farm Plot / Seasonal NFT
+
+## Required Fields
+- plot_id
+- farm_id
+- geometry (GeoJSON)
+- crop_type
+- season
+- expected_yield
+- farmer_wallet
+
+## Legal Note
+NFT đại diện quyền lợi mùa vụ, không đại diện quyền sở hữu đất.
+
+7️⃣ 10_DELIVERY_MANAGEMENT/04_Risk_Register.md
+# Risk Register
+
+| Risk | Impact | Mitigation |
+|----|----|----|
+| NFT bị hiểu là sở hữu đất | Cao | Legal disclaimer rõ |
+| Google Maps cost cao | Trung | Cache + quota |
+| Sai ranh giới | Trung | Manual draw + confirm |

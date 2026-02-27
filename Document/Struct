@@ -1,0 +1,83 @@
+AgriVerse-NFT/
+│
+├── 00_README/
+│   ├── README.md
+│   └── PROJECT_OVERVIEW.md
+│
+├── 01_VISION_STRATEGY/
+│   ├── 01_Product_Vision.md
+│   ├── 02_Product_Positioning.md
+│   ├── 03_Core_Value_Proposition.md
+│   └── 04_Stakeholder_Map.md
+│
+├── 02_USER_RESEARCH/
+│   ├── 01_User_Persona_Farmer.md
+│   ├── 02_User_Persona_Investor.md
+│   ├── 03_User_Persona_Admin.md
+│   └── 04_User_Journey_Map.md
+│
+├── 03_BUSINESS_PROCESS/
+│   ├── 01_Overall_Business_Flow.md
+│   ├── 02_Farm_Lifecycle.md
+│   ├── 03_Plot_Lifecycle.md
+│   ├── 04_NFT_Lifecycle.md
+│   └── 05_Product_Supply_Chain.md
+│
+├── 04_FUNCTIONAL_SPEC/
+│   ├── 00_Functional_Overview.md
+│   ├── 01_Farm_Management_Module.md
+│   ├── 02_Farm_Plot_Drawing_Tool.md
+│   ├── 03_Task_Log_Module.md
+│   ├── 04_IoT_Module.md
+│   ├── 05_Marketplace_Module.md
+│   ├── 06_NFT_Module.md
+│
+├── 05_UI_UX_SPEC/
+│   ├── 00_UX_Principles.md
+│   ├── 01_Screen_List.md
+│   ├── 02_Farm_Plot_Drawing_UI.md
+│   ├── 03_NFT_Creation_Wizard_UI.md
+│   └── 04_Design_System.md
+│
+├── 06_TECH_ARCHITECTURE/
+│   ├── 01_System_Architecture.md
+│   ├── 02_Service_Architecture.md
+│   ├── 03_Data_Flow.md
+│   └── 04_IoT_Architecture.md
+│
+├── 07_DATABASE_DESIGN/
+│   ├── 01_ERD.md
+│   ├── 02_Table_Definitions.md
+│   └── 03_GeoSpatial_Data_Model.md
+│
+├── 08_API_SPEC/
+│   ├── 00_API_Convention.md
+│   ├── 01_Farm_API.md
+│   ├── 02_Plot_API.md
+│   ├── 03_NFT_API.md
+│   └── 04_Marketplace_API.md
+│
+├── 09_BLOCKCHAIN_NFT/
+│   ├── 01_Blockchain_Overview.md
+│   ├── 02_NFT_Types.md
+│   ├── 03_NFT_Metadata_Schema.md
+│   ├── 04_Smart_Contract_Spec.md
+│   └── 05_Onchain_Offchain_Mapping.md
+│
+├── 10_DELIVERY_MANAGEMENT/
+│   ├── 01_Roadmap.md
+│   ├── 02_MVP_Scope.md
+│   ├── 03_Backlog.md
+│   └── 04_Risk_Register.md
+│
+├── 11_LEGAL_COMPLIANCE/
+│   ├── 01_Legal_Assumptions.md
+│   ├── 02_NFT_Disclaimer.md
+│   ├── 03_Data_Privacy.md
+│   └── 04_Terms_For_Farmers.md
+│
+└── 12_SOP_OPERATION/
+    ├── 01_SOP_Create_Farm.md
+    ├── 02_SOP_Draw_Plot.md
+    ├── 03_SOP_Issue_NFT.md
+    └── 04_SOP_Dispute_Handling.md
